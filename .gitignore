@@ -4,8 +4,9 @@ venv/
 # Ignore environment variables file
 .env
 
-#SQLITE database
+# SQLITE database
 db.sqlite3
 
-
+# Ignore all contents of media/product but not the media folder itself
 /media/product/
+!/media/   # Exclude the media folder from being ignored
