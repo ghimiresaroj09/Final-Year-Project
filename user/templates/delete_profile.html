@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container d-flex justify-content-center mt-5">
+    <div class="card shadow-lg" style="width: 30rem;">
+        <div class="card-body text-center">
+            <h2 class="card-title mb-4">Delete Confirmation</h2>
+            <p class="card-text">Are you sure you want to delete {{ user.username | title }}'s profile?</p>
+            <form method="POST" action="{% url 'delete_profile' %}">
+                {% csrf_token %}
+                <div class="d-flex justify-content-center mt-4">
+                    <button type="submit" class="btn btn-danger mx-2">Yes, delete</button>
+                    <a href="{% url 'view_profile' %}" class="btn btn-success mx-2">No, go back</a>
+                </div>
+            </form>
+        </div><br>
+    </div>
+</div>
+<div>
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+</div>
+
+{% endblock %}
