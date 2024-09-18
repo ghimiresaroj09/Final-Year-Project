@@ -23,7 +23,7 @@
         <p class="lead text-muted">{{product.description}}</p>
         {% if not product.out_of_stock %}
           {% if product.is_sale %}
-          <h4 class="text-danger">
+          <h4>
             <strike>Rs.{{product.price}}</strike> &nbsp; Rs.{{product.sale_price}}
           </h4>
           {% else %}
@@ -47,7 +47,7 @@
           </button>
         {% else %}
           {% if product.is_sale %}
-          <h4 class="text-danger">
+          <h4>
             <strike>Rs.{{product.price}}</strike> &nbsp; Rs.{{product.sale_price}}
           </h4>
           {% else %}

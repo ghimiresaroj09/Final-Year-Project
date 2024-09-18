@@ -14,7 +14,7 @@ def home(request):
     page_obj = paginator.get_page(page_number)
     catwise={}
     for category in page_obj:
-        product=Product.objects.filter(category=category).order_by('-price')
+        product=Product.objects.filter(category=category).order_by('out_of_stock')
         catwise[category]= product
     return render(request,'home.html',{'catwise':catwise,'page_obj':page_obj})
 
