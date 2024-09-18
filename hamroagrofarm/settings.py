@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'product',
     'payment',
     'jazzmin',
-    'sslserver',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

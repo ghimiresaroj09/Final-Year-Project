@@ -20,9 +20,12 @@ def home(request):
 
 
 def product(request, pk):
-    product=Product.objects.get(id=pk)
-    related_products=Product.objects.filter(category=product.category).exclude(id=product.id).order_by('?')[:4]
-    return render(request,'product.html',{'product':product,'related_products':related_products})
+    try:
+        product=Product.objects.get(id=pk)
+        related_products=Product.objects.filter(category=product.category).exclude(id=product.id).order_by('?')[:4]
+        return render(request,'product.html',{'product':product,'related_products':related_products})
+    except:
+        return render(request, '404notfound.html')
 
 
 def category(request, cname):
@@ -31,7 +34,7 @@ def category(request, cname):
         products = Product.objects.filter(category=category)
         return render(request, 'category.html', {'products': products,'category':category})
     except:
-        return render(request, '404notfound.html', {'cname': cname})
+        return render(request, '404notfound.html')
 
 @login_required(login_url='login')
 def add_product(request):
