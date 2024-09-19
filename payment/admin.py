@@ -14,5 +14,3 @@ class OrderAdmin(admin.ModelAdmin):
     list_per_page=10
 
 admin.site.register(Order, OrderAdmin)
-admin.site.register(OrderItem)
-

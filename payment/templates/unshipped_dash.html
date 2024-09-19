@@ -27,11 +27,18 @@
                             <td>{{ order.shipping_address }}</td>
                             <td>Rs.{{ order.total_amount }}</td>
                             <td>
-                                <form method="POST" action="{% url 'unshipped_dash' %}">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="num" value="{{ order.id }}">
-                                    <button type="submit" class="btn btn-success">Mark as Shipped</button>
-                                </form>
+                                <div class="d-flex">
+                                    <a href="{% url 'order_confirmation' order.id %}" class="btn btn-info me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="View Details">
+                                        <i class="fa fa-eye"></i>
+                                    </a>
+                                    <form method="POST" action="{% url 'unshipped_dash' %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="num" value="{{ order.id }}">
+                                        <button type="submit" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="top" title="Mark as Shipped">
+                                            <i class="fa fa-truck"></i>
+                                        </button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                     {% endfor %}
@@ -43,4 +50,11 @@
     </div>
 </body>
 </html>
+<script>
+    // Initialize Bootstrap tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+</script>
 {% endblock %}

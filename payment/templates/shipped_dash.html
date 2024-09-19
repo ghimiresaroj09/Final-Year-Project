@@ -27,11 +27,21 @@
                             <td>Rs.{{ order.total_amount }}</td>
                             <td>{{ order.date_shipped }}</td>
                             <td>
-                                <form method="POST" action="{% url 'shipped_dash' %}">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="num" value="{{ order.id }}">
-                                    <button type="submit" class="btn btn-danger">Mark as Unshipped</button>
-                                </form>
+                                <div class="d-flex">
+                                    <a href="{% url 'order_confirmation' order.id %}" class="btn btn-info me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="View Details">
+                                        <i class="fa fa-eye"></i>
+                                    </a>
+                                    <form method="POST" action="{% url 'shipped_dash' %}" class="me-2">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="num" value="{{ order.id }}">
+                                        <button type="submit" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="Mark as Unshipped">
+                                            <i class="fa fa-undo"></i>
+                                        </button>
+                                    </form>
+                                    <a href="{% url 'generate_invoice_pdf' order.id %}" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Download Invoice">
+                                        <i class="fa fa-download"></i>
+                                    </a>
+                                </div>
                             </td>
                         </tr>
                     {% endfor %}
@@ -43,4 +53,11 @@
     </div>
 </body>
 </html>
+<script>
+    // Initialize Bootstrap tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+</script>
 {% endblock %}

@@ -26,9 +26,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-p3mz8%b$m@869&gj6s_2zzjkf8xgn0dzr)jhjy_5wrx($em9i_'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['hamroagrofarm-e6bdgucpc2b6d5dt.canadacentral-01.azurewebsites.net']
 
 LOGIN_URL = '/user/login/'
 

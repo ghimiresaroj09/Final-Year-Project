@@ -9,6 +9,9 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.contrib import messages
+from django.http import HttpResponse
+from django.template.loader import get_template
+from xhtml2pdf import pisa
 
 @login_required
 def checkout(request):
@@ -101,7 +104,7 @@ def order_history(request):
 @login_required
 def unshipped_dash(request):
     if request.user.is_authenticated and request.user.is_superuser:
-        orders = Order.objects.filter(shipping_status=False)
+        orders = Order.objects.filter(shipping_status=False).order_by('-date_ordered')
         if request.method == 'POST':
             order_id = request.POST['num']
             # Get the order or return 404 if not found
@@ -122,7 +125,7 @@ def unshipped_dash(request):
 @login_required
 def shipped_dash(request):
     if request.user.is_authenticated and request.user.is_superuser:
-        orders = Order.objects.filter(shipping_status=True)
+        orders = Order.objects.filter(shipping_status=True).order_by('-date_ordered')
         if request.method == 'POST':
             order_id = request.POST['num']
             # Get the order or return 404 if not found
@@ -136,6 +139,41 @@ def shipped_dash(request):
             return redirect('shipped_dash')
 
         return render(request, "shipped_dash.html", {"orders": orders})
+    else:
+        messages.error(request, "Access Denied")
+        return redirect('home')
+    
+
+
+@login_required
+def generate_invoice_pdf(request, order_id):
+    if request.user.is_superuser:
+        order = get_object_or_404(Order, id=order_id)
+        order_items = OrderItem.objects.filter(order=order)
+
+        # Load the invoice template
+        template_path = 'invoice.html'
+        context = {
+            'order': order,
+            'order_items': order_items,
+        }
+
+        # Render the HTML template to a string
+        template = get_template(template_path)
+        html = template.render(context)
+
+        # Create a PDF from the rendered HTML
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = f'attachment; filename="invoice_{order.id}.pdf"'
+
+        # Use xhtml2pdf to convert HTML to PDF
+        pisa_status = pisa.CreatePDF(html, dest=response)
+
+        # Return PDF file if successfully created, else return an error
+        if pisa_status.err:
+            return HttpResponse('Error creating PDF', status=400)
+
+        return response
     else:
         messages.error(request, "Access Denied")
         return redirect('home')
