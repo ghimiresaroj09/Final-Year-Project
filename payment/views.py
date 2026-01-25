@@ -83,13 +83,19 @@ def checkout(request):
 
 @login_required
 def order_confirmation(request, order_id):
-    order = get_object_or_404(Order, id=order_id)
+    order = get_object_or_404(
+        Order,
+        id=order_id,
+        user=request.user  # 🔒 ownership check
+    )
     order_items = OrderItem.objects.filter(order=order)
+
     context = {
         'order': order,
         'order_items': order_items,
     }
     return render(request, 'order_confirmation.html', context)
+
 
 
 @login_required
