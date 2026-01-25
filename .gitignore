@@ -7,8 +7,14 @@ venv/
 # SQLITE database
 db.sqlite3
 
-# Ignore all contents of media/product but not the media folder itself
+# Ignore all contents of media/product and media/blog
 media/product/
+media/blog/
 
-# Exclude the media folder from being ignored
-# !/media/   
+# Documentation files to ignore
+DESIGN_SYSTEM.md
+QUICK_START_GUIDE.md
+UI_IMPLEMENTATION_GUIDE.md
+UI_UPGRADE_SUMMARY.md
+UPGRADE_COMPLETION_CHECKLIST.md
+**/BLOG_SETUP.md
