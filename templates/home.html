@@ -1,83 +1,431 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<!-- Section-->
+
+<!-- Hero Section -->
+<section class="hero-section">
+  <div class="hero-content">
+    <h1 class="hero-title">Fresh Organic Products</h1>
+    <p class="hero-subtitle">Direct from Farm to Your Table</p>
+  </div>
+</section>
+
+<!-- Products Section -->
 <section class="py-5">
-  <div class="container px-4 px-lg-5 mt-5">
+  <div class="container px-4 px-lg-5">
     {% for category, products in catwise.items %}
-      <div class="row mb-4">
-        <div class="col">
-          <h2><i>{{ category.name }}:</i></h2>
+      <div class="category-section">
+        <div class="category-header">
+          <div class="category-title-container">
+            <i class="bi bi-leaf category-icon"></i>
+            <h2>{{ category.name }}</h2>
+          </div>
+          <a href="{% url 'category' category.name %}" class="view-all-btn">
+            View All <i class="bi bi-arrow-right ms-2"></i>
+          </a>
         </div>
-        <hr>
-      </div>
-      <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-        {% for product in products %}
-          <div class="col mb-5">
-            <div class="card h-100">
-              <div class="image-container">
-                <a href="{% url 'product' product.id %}">
-                  <img class="card-img-top" src="{{ product.image.url }}" alt="{{ product.name }}">
-                </a>
-              </div>
-              <div class="card-body p-4">
-                <div class="text-center">
-                  <a href="{% url 'product' product.id %}" style="text-decoration: none; color: black;">
-                    <h5 class="fw-bolder">{{ product.name }}</h5>
-                  </a>
+        
+        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4">
+          {% for product in products %}
+            <div class="col mb-5">
+              <div class="product-card">
+                <div class="product-image-wrapper">
+                  <div class="image-container">
+                    <a href="{% url 'product' product.id %}">
+                      <img class="product-image" src="{{ product.image.url }}" alt="{{ product.name }}">
+                    </a>
+                  </div>
                   {% if not product.out_of_stock %}
                     {% if product.is_sale %}
-                      <div class="badge bg-danger text-white position-absolute" style="top: 0.5rem; left: 0.5rem; z-index: 1">
-                        Sale
+                      <div class="product-badge sale-badge">
+                        <i class="bi bi-tag-fill me-1"></i>Sale
                       </div>
-                        <strike>Rs.{{ product.price }}</strike> &nbsp; Rs.{{ product.sale_price }}
-                    {% else %}
-                      Rs.{{ product.price }}
                     {% endif %}
                   {% else %}
-                    <i class="text-danger">Out of Stock</i>
+                    <div class="product-badge out-of-stock-badge">
+                      Out of Stock
+                    </div>
                   {% endif %}
                 </div>
-              </div>
-              <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                <div class="text-center">
-                  {% if not product.out_of_stock %}
-                    <div class="d-flex justify-content-center align-items-center mb-3">
-                      <button type="button" class="btn btn-outline-dark" id="decrement{{ product.id }}">-</button>
-                      <input type="text" class="form-control form-control-sm qty-input text-center mx-1" id="qty{{ product.id }}" value="1" readonly style="width: 60px;">
-                      <button type="button" class="btn btn-outline-dark" id="increment{{ product.id }}">+</button>
-                    </div>
-                    <button type="button" data-index="{{ product.id }}" class="btn btn-outline-dark mt-auto add-to-cart">Add to Cart</button>
-                  {% endif %}
+                
+                <div class="card-body p-4">
+                  <div class="text-center">
+                    <a href="{% url 'product' product.id %}" class="product-link">
+                      <h5 class="product-name fw-bolder">{{ product.name }}</h5>
+                    </a>
+                    
+                    {% if not product.out_of_stock %}
+                      {% if product.is_sale %}
+                        <div class="product-price">
+                          <span class="original-price"><strike>Rs.{{ product.price }}</strike></span>
+                          <span class="sale-price">Rs.{{ product.sale_price }}</span>
+                        </div>
+                      {% else %}
+                        <div class="product-price">
+                          <span class="current-price">Rs.{{ product.price }}</span>
+                        </div>
+                      {% endif %}
+                    {% endif %}
+                  </div>
+                </div>
+                
+                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                  <div class="text-center">
+                    {% if not product.out_of_stock %}
+                      <div class="quantity-control mb-3">
+                        <button type="button" class="btn-qty decrement-btn" id="decrement{{ product.id }}" aria-label="Decrease quantity">
+                          <i class="bi bi-dash-lg"></i>
+                        </button>
+                        <input type="text" class="qty-input text-center" id="qty{{ product.id }}" value="1" readonly>
+                        <button type="button" class="btn-qty increment-btn" id="increment{{ product.id }}" aria-label="Increase quantity">
+                          <i class="bi bi-plus-lg"></i>
+                        </button>
+                      </div>
+                      <button type="button" data-index="{{ product.id }}" class="btn btn-outline-dark add-to-cart w-100">
+                        <i class="bi bi-cart-plus me-2"></i>Add to Cart
+                      </button>
+                    {% else %}
+                      <button type="button" class="btn btn-outline-dark w-100" disabled>
+                        <i class="bi bi-exclamation-circle me-2"></i>Out of Stock
+                      </button>
+                    {% endif %}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        {% endfor %}
+          {% endfor %}
+        </div>
       </div>
     {% endfor %}
   </div>
 
   <!-- Pagination links -->
-  <div class="pagination">
-    {% for num in page_obj.paginator.page_range %}
-      <a href="?page={{ num }}" class="page-link {% if num == page_obj.number %}current{% endif %}">{{ num }}</a>
-    {% endfor %}
-  </div>
+  {% if page_obj.paginator.num_pages > 1 %}
+    <div class="pagination">
+      {% if page_obj.has_previous %}
+        <a href="?page=1" class="page-link page-control">
+          <i class="bi bi-chevron-double-left"></i>
+        </a>
+        <a href="?page={{ page_obj.previous_page_number }}" class="page-link page-control">
+          <i class="bi bi-chevron-left"></i>
+        </a>
+      {% endif %}
+      
+      {% for num in page_obj.paginator.page_range %}
+        <a href="?page={{ num }}" class="page-link {% if num == page_obj.number %}current{% endif %}">
+          {{ num }}
+        </a>
+      {% endfor %}
+      
+      {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}" class="page-link page-control">
+          <i class="bi bi-chevron-right"></i>
+        </a>
+        <a href="?page={{ page_obj.paginator.num_pages }}" class="page-link page-control">
+          <i class="bi bi-chevron-double-right"></i>
+        </a>
+      {% endif %}
+    </div>
+  {% endif %}
 </section>
+
+<style>
+/* Hero Section */
+.hero-section {
+  background: linear-gradient(135deg, #0db04b 0%, #0a9a3f 100%);
+  color: white;
+  padding: 60px 20px;
+  text-align: center;
+  margin-bottom: 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-section::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -10%;
+  width: 400px;
+  height: 400px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 50%;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-title {
+  font-size: 48px;
+  font-weight: 800;
+  margin-bottom: 10px;
+  letter-spacing: -1px;
+}
+
+.hero-subtitle {
+  font-size: 20px;
+  font-weight: 300;
+  opacity: 0.9;
+  letter-spacing: 0.5px;
+}
+
+/* Category Section */
+.category-section {
+  margin-bottom: 60px;
+}
+
+.category-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 35px;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.category-title-container {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.category-icon {
+  font-size: 32px;
+  color: #0db04b;
+  animation: leaf-float 3s ease-in-out infinite;
+}
+
+@keyframes leaf-float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+.view-all-btn {
+  color: #0db04b;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 16px;
+  padding: 10px 20px;
+  border: 2px solid #0db04b;
+  border-radius: 25px;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+}
+
+.view-all-btn:hover {
+  background-color: #0db04b;
+  color: white;
+  transform: translateX(5px);
+}
+
+/* Product Card */
+.product-card {
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.product-card:hover {
+  transform: translateY(-12px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+}
+
+.product-image-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+.product-image-wrapper .image-container:hover .product-image {
+  transform: scale(1.1);
+}
+
+.product-image {
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.product-badge {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  padding: 8px 16px;
+  border-radius: 25px;
+  font-weight: 600;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  z-index: 10;
+  animation: badge-appear 0.4s ease;
+}
+
+@keyframes badge-appear {
+  from { 
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.sale-badge {
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+  color: white;
+}
+
+.out-of-stock-badge {
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+}
+
+.product-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.product-name {
+  color: #0f1419;
+  margin: 10px 0;
+  font-size: 16px;
+  line-height: 1.4;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.product-card:hover .product-name {
+  color: #0db04b;
+}
+
+.product-price {
+  margin: 12px 0;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+
+.original-price {
+  color: #999;
+  font-size: 14px;
+}
+
+.sale-price {
+  color: #dc3545;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.current-price {
+  color: #0db04b;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+/* Quantity Control */
+.quantity-control {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-qty {
+  background-color: #f0f0f0;
+  border: none;
+  border-radius: 8px;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #0f1419;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 16px;
+}
+
+.btn-qty:hover {
+  background-color: #0db04b;
+  color: white;
+  transform: scale(1.05);
+}
+
+.btn-qty:active {
+  transform: scale(0.95);
+}
+
+.qty-input {
+  width: 60px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  padding: 6px 12px;
+  text-align: center;
+  font-weight: 600;
+  background-color: #fff;
+  color: #0f1419;
+}
+
+/* Page Control */
+.page-control {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  padding: 0 !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 36px;
+  }
+
+  .hero-subtitle {
+    font-size: 16px;
+  }
+
+  .category-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .view-all-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .product-name {
+    font-size: 14px;
+    min-height: 36px;
+  }
+}
+</style>
 
 <script>
   // Update quantity with + and - buttons
-  document.querySelectorAll('.btn-outline-dark').forEach(button => {
-    button.addEventListener('click', function() {
+  document.querySelectorAll('.increment-btn, .decrement-btn').forEach(button => {
+    button.addEventListener('click', function(e) {
+      e.preventDefault();
       const productId = this.id.replace(/^(increment|decrement)/, '');
       const qtyInput = document.getElementById('qty' + productId);
       let currentValue = parseInt(qtyInput.value);
 
-      if (this.id.startsWith('decrement') && currentValue > 1) {
+      if (this.classList.contains('decrement-btn') && currentValue > 1) {
         qtyInput.value = currentValue - 1;
       }
-      if (this.id.startsWith('increment') && currentValue < 10) {
+      if (this.classList.contains('increment-btn') && currentValue < 10) {
         qtyInput.value = currentValue + 1;
       }
     });
@@ -88,6 +436,7 @@
     e.preventDefault();
     var productId = $(this).data('index');
     var quantity = $('#qty' + productId).val();
+    var $button = $(this);
 
     $.ajax({
       type: 'POST',
@@ -102,6 +451,7 @@
         location.reload();
       },
       error: function(xhr, errmsg, err) {
+        alertify.error('Error adding to cart');
       }
     });
   });

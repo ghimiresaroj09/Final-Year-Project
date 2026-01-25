@@ -9,7 +9,7 @@ admin.site.index_title = "Welcome Admin"
 # Inline profile model in the user admin
 class ProfileInline(admin.StackedInline):
     model = Profile
-    exclude = ('old_cart',)
+    readonly_fields = ('old_cart',)
     can_delete = False
 
 # Extend User Model with sections
@@ -40,14 +40,14 @@ class UserAdmin(BaseUserAdmin):
     list_per_page = 10
 
     # Make some fields read-only
-    readonly_fields = ('username', 'email', 'last_login', 'date_joined')
+    readonly_fields = ('email', 'last_login', 'date_joined')
 
 # ProfileAdmin for Profile model
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ('user', 'phone', 'address',)
+    list_display = ('user', 'phone', 'address','old_cart')
     search_fields = ('user__username', 'phone')
     list_per_page = 10
-    exclude = ('old_cart',)
+    readonly_fields = ('old_cart',)
 
 # Unregister the default User model
 admin.site.unregister(User)

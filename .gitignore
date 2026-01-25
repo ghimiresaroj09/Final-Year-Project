@@ -8,7 +8,7 @@ venv/
 db.sqlite3
 
 # Ignore all contents of media/product but not the media folder itself
-/media/product/
+media/product/
 
 # Exclude the media folder from being ignored
-!/media/   
+# !/media/   

@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'cart',
     'product',
     'payment',
+    'blog',
     'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -73,6 +74,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'product.context_processor.categories_processor',
                 'cart.context_processor.cart',
+                'blog.context_processors.blog_context',
             ],
         },
     },
@@ -186,5 +188,5 @@ SESSION_COOKIE_AGE = 1209600  # 2 weeks in seconds
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 # Optional: Security settings for secure cookies
-SESSION_COOKIE_SECURE = True      # Use only with HTTPS
+SESSION_COOKIE_SECURE = False      # Use only with HTTPS
 SESSION_COOKIE_HTTPONLY = True    # Prevent JavaScript access to session cookies

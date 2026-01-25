@@ -52,14 +52,12 @@ def register_user(request):
 
         #Check if password and confirm_password is same or not
         if password != confirm_password:
-            messages.warning(request, "Password and Confirm Password does not match")
+            messages.warning(request, "Password and Confirm Password does not match.")
             return redirect('register')
 
-        existing_user = User.objects.filter(username=username).first()
-        if existing_user:
-            messages.warning(request, "User already exists")
+        if User.objects.filter(username=username).exists():
+            messages.warning(request, "Username already taken.")
             return redirect('register')
-
 
         # If the user doesn't exist, proceed with creating a new user
         my_user = User.objects.create_user(username=username, email=email, first_name=first_name, last_name=last_name)

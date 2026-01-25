@@ -11,7 +11,7 @@
         <p><strong>Customer Name:</strong> {{ order.full_name }}</p>
         <p><strong>Email:</strong> {{ order.email }}</p>
         <p><strong>Shipping Address:</strong> {{ order.shipping_address }}</p>
-        <p><strong>Date Ordered:</strong> {{ order.date_ordered|date:"M d, Y H:i" }}</p>
+        <p><strong>Date Ordered:</strong> {{ order.date_ordered}}</p>
         <p><strong>Total Amount:</strong> Rs.{{ order.total_amount }}</p>
         <p><strong>Shipping Status:</strong> {{ order.shipping_status|yesno:"Shipped,Not Shipped" }}</p>
         <p><strong>Date Shipped:</strong> {{ order.date_shipped|default:"Not Shipped Yet" }}</p>

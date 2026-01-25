@@ -27,3 +27,8 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+    
+
+    @property
+    def savings(self):
+        return self.price - self.sale_price

@@ -5,9 +5,9 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="" />
-    <meta name="author" content="" />
-    <title>Hamro Agro Farm</title>
+    <meta name="description" content="Hamro Agro Farm - Fresh Organic Products Direct from Farm to Table" />
+    <meta name="author" content="Hamro Agro Farm" />
+    <title>Hamro Agro Farm - Fresh Organic Products</title>
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{% static 'assets/logo.png' %}" />
     <!-- Bootstrap Icons and Font Awesome -->
@@ -22,6 +22,61 @@
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/alertify.min.js"></script>
+    <style>
+      /* Additional Global Styles */
+      html, body {
+        height: 100%;
+      }
+
+      body {
+        display: flex;
+        flex-direction: column;
+        background-color: #f8f9fa;
+      }
+
+      main {
+        flex: 1;
+      }
+
+      /* Smooth transitions for all interactive elements */
+      button, a, input[type="submit"], input[type="button"] {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      /* Link styling */
+      a {
+        color: #0db04b;
+        text-decoration: none;
+      }
+
+      a:hover {
+        color: #0a9a3f;
+      }
+
+      /* Selection styling */
+      ::selection {
+        background-color: #0db04b;
+        color: white;
+      }
+
+      /* Scrollbar styling */
+      ::-webkit-scrollbar {
+        width: 10px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: #0db04b;
+        border-radius: 5px;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: #0a9a3f;
+      }
+    </style>
   </head>
   <body class="d-flex flex-column min-vh-100">
     {% include 'navbar.html' %}
@@ -32,11 +87,38 @@
     </main>
 
     <!-- Footer -->
-    <footer class="py-3 bg-dark mt-auto">
+    <footer class="py-3 mt-auto">
       <div class="container">
+        <div class="row">
+          <div class="col-md-6 mb-3 mb-md-0">
+            <h5 style="color: white; font-weight: 700; margin-bottom: 15px;">About Hamro Agro Farm</h5>
+            <p style="color: rgba(255, 255, 255, 0.8); font-size: 14px; margin: 0; line-height: 1.6;">
+              We provide fresh, organic products directly from our farms to your table. Quality and freshness guaranteed.
+            </p>
+          </div>
+          <div class="col-md-3 mb-3 mb-md-0">
+            <h5 style="color: white; font-weight: 700; margin-bottom: 15px;">Quick Links</h5>
+            <ul style="list-style: none; padding: 0; margin: 0;">
+              <li><a href="{% url 'home' %}" style="color: rgba(255, 255, 255, 0.8); font-size: 14px;">Home</a></li>
+              <li><a href="{% url 'sale' %}" style="color: rgba(255, 255, 255, 0.8); font-size: 14px;">Sale</a></li>
+              <li><a href="{% url 'blog:blog_list' %}" style="color: rgba(255, 255, 255, 0.8); font-size: 14px;">Blog & News</a></li>
+              <li><a href="{% url 'cart_summary' %}" style="color: rgba(255, 255, 255, 0.8); font-size: 14px;">Cart</a></li>
+            </ul>
+          </div>
+          <div class="col-md-3">
+            <h5 style="color: white; font-weight: 700; margin-bottom: 15px;">Follow Us</h5>
+            <div style="display: flex; gap: 15px;">
+              <a href="#" style="color: white; font-size: 20px; opacity: 0.8;"><i class="bi bi-facebook"></i></a>
+              <a href="#" style="color: white; font-size: 20px; opacity: 0.8;"><i class="bi bi-twitter"></i></a>
+              <a href="#" style="color: white; font-size: 20px; opacity: 0.8;"><i class="bi bi-instagram"></i></a>
+            </div>
+          </div>
+        </div>
+        <hr style="border-color: rgba(255, 255, 255, 0.2); margin: 20px 0;">
         <p class="m-0 text-center text-white" style="font-size: 0.9rem;">
           Copyright &copy; Hamro Agro Farm 
           <script>document.write(new Date().getFullYear())</script>
+          | All Rights Reserved
         </p>
       </div>
     </footer>

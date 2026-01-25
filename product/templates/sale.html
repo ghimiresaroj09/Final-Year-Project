@@ -1,47 +1,217 @@
 {% extends 'base.html' %}
-{% load static  %}
+{% load static %}
+
 {% block content %}
-    <!-- Section-->
-    <section class="py-5">
-      <div class="container px-4 px-lg-5 mt-5">
-      {{title}}
-      <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+
+<style>
+/* Sale Page Header */
+.sale-header-banner {
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+  color: white;
+  padding: 80px 20px;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+
+.sale-header-banner::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -10%;
+  width: 500px;
+  height: 500px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 50%;
+}
+
+.sale-header-banner::after {
+  content: '';
+  position: absolute;
+  bottom: -30%;
+  left: -5%;
+  width: 300px;
+  height: 300px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 50%;
+}
+
+.sale-header-content {
+  position: relative;
+  z-index: 1;
+}
+
+.sale-title {
+  font-size: 56px;
+  font-weight: 800;
+  margin-bottom: 15px;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  letter-spacing: -1px;
+}
+
+.sale-badge-large {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.25);
+  padding: 12px 30px;
+  border-radius: 50px;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  border: 2px solid white;
+  animation: pulse-badge 2s ease-in-out infinite;
+}
+
+@keyframes pulse-badge {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.sale-description {
+  font-size: 18px;
+  opacity: 0.95;
+  margin: 0;
+}
+
+.sale-section {
+  padding: 60px 0;
+  background: #f8f9fa;
+}
+
+.no-sale-products {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 20px;
+  text-align: center;
+}
+
+.no-sale-icon {
+  font-size: 80px;
+  color: #dc3545;
+  margin-bottom: 20px;
+  opacity: 0.8;
+}
+
+.no-sale-products h2 {
+  color: #0f1419;
+  font-size: 28px;
+  margin-bottom: 15px;
+  font-weight: 800;
+}
+
+.no-sale-products p {
+  color: #666;
+  margin-bottom: 30px;
+  font-size: 16px;
+}
+
+.back-btn {
+  background: linear-gradient(135deg, #0db04b 0%, #0a9a3f 100%);
+  color: white;
+  padding: 12px 30px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.back-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(13, 176, 75, 0.3);
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .sale-title {
+    font-size: 36px;
+  }
+
+  .sale-header-banner {
+    padding: 50px 20px;
+  }
+
+  .sale-section {
+    padding: 40px 0;
+  }
+}
+</style>
+
+<!-- Sale Header Banner -->
+<div class="sale-header-banner">
+  <div class="container px-4 px-lg-5">
+    <div class="sale-header-content">
+      <div class="sale-badge-large">
+        <i class="bi bi-lightning-fill me-2"></i>Exclusive Sale
+      </div>
+      <h1 class="sale-title">Special Offers</h1>
+      <p class="sale-description">Don't miss out on incredible discounts on our premium organic products</p>
+    </div>
+  </div>
+</div>
+
+<!-- Products Section -->
+<section class="sale-section">
+  <div class="container px-4 px-lg-5">
+    {% if products %}
+      <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4">
         {% for product in products %}
           <div class="col mb-5">
-            <div class="card h-100">
-              <div class="image-container">
-                <a href="{% url 'product' product.id %}">
-                  <img class="card-img-top" src="{{ product.image.url }}" alt="{{ product.name }}">
-                </a>
+            <div class="product-card">
+              <div class="product-image-wrapper">
+                <div class="image-container">
+                  <a href="{% url 'product' product.id %}">
+                    <img class="product-image" src="{{ product.image.url }}" alt="{{ product.name }}">
+                  </a>
+                </div>
+                {% if product.is_sale %}
+                  <div class="product-badge sale-badge">
+                    <i class="bi bi-tag-fill me-1"></i>Sale
+                  </div>
+                {% endif %}
               </div>
+              
               <div class="card-body p-4">
                 <div class="text-center">
-                  <a href="{% url 'product' product.id %}" style="text-decoration: none; color: black;">
-                    <h5 class="fw-bolder">{{ product.name }}</h5>
+                  <a href="{% url 'product' product.id %}" class="product-link">
+                    <h5 class="product-name fw-bolder">{{ product.name }}</h5>
                   </a>
+                  
                   {% if not product.out_of_stock %}
                     {% if product.is_sale %}
-                      <div class="badge bg-danger text-white position-absolute" style="top: 0.5rem; left: 0.5rem; z-index: 1">
-                        Sale
+                      <div class="product-price">
+                        <span class="original-price"><strike>Rs.{{ product.price }}</strike></span>
+                        <span class="sale-price">Rs.{{ product.sale_price }}</span>
                       </div>
-                        <strike>Rs.{{ product.price }}</strike> &nbsp; Rs.{{ product.sale_price }}
                     {% else %}
-                      Rs.{{ product.price }}
+                      <div class="product-price">
+                        <span class="current-price">Rs.{{ product.price }}</span>
+                      </div>
                     {% endif %}
-                  {% else %}
-                    <i class="text-danger">Out of Stock</i>
                   {% endif %}
                 </div>
               </div>
+              
               <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
                 <div class="text-center">
                   {% if not product.out_of_stock %}
-                    <div class="d-flex justify-content-center align-items-center mb-3">
-                      <button type="button" class="btn btn-outline-dark" id="decrement{{ product.id }}">-</button>
-                      <input type="text" class="form-control form-control-sm qty-input text-center mx-1" id="qty{{ product.id }}" value="1" readonly style="width: 60px;">
-                      <button type="button" class="btn btn-outline-dark" id="increment{{ product.id }}">+</button>
+                    <div class="quantity-control mb-3">
+                      <button type="button" class="btn-qty decrement-btn" id="decrement{{ product.id }}" aria-label="Decrease quantity">
+                        <i class="bi bi-dash-lg"></i>
+                      </button>
+                      <input type="text" class="qty-input text-center" id="qty{{ product.id }}" value="1" readonly>
+                      <button type="button" class="btn-qty increment-btn" id="increment{{ product.id }}" aria-label="Increase quantity">
+                        <i class="bi bi-plus-lg"></i>
+                      </button>
                     </div>
-                    <button type="button" data-index="{{ product.id }}" class="btn btn-outline-dark mt-auto add-to-cart">Add to Cart</button>
+                    <button type="button" data-index="{{ product.id }}" class="btn btn-outline-dark add-to-cart w-100">
+                      <i class="bi bi-cart-plus me-2"></i>Add to Cart
+                    </button>
+                  {% else %}
+                    <button type="button" class="btn btn-outline-dark w-100" disabled>
+                      <i class="bi bi-exclamation-circle me-2"></i>Out of Stock
+                    </button>
                   {% endif %}
                 </div>
               </div>
@@ -49,20 +219,32 @@
           </div>
         {% endfor %}
       </div>
+    {% else %}
+      <div class="no-sale-products">
+        <i class="bi bi-tag no-sale-icon"></i>
+        <h2>No Sale Products</h2>
+        <p>Check back soon for amazing deals on our organic products!</p>
+        <a href="{% url 'home' %}" class="back-btn">
+          <i class="bi bi-house me-2"></i>Continue Shopping
+        </a>
       </div>
-    </section>
+    {% endif %}
+  </div>
+</section>
+
 <script>
   // Update quantity with + and - buttons
-  document.querySelectorAll('.btn-outline-dark').forEach(button => {
-    button.addEventListener('click', function() {
+  document.querySelectorAll('.increment-btn, .decrement-btn').forEach(button => {
+    button.addEventListener('click', function(e) {
+      e.preventDefault();
       const productId = this.id.replace(/^(increment|decrement)/, '');
       const qtyInput = document.getElementById('qty' + productId);
       let currentValue = parseInt(qtyInput.value);
 
-      if (this.id.startsWith('decrement') && currentValue > 1) {
+      if (this.classList.contains('decrement-btn') && currentValue > 1) {
         qtyInput.value = currentValue - 1;
       }
-      if (this.id.startsWith('increment') && currentValue < 10) {
+      if (this.classList.contains('increment-btn') && currentValue < 10) {
         qtyInput.value = currentValue + 1;
       }
     });
@@ -87,8 +269,10 @@
         location.reload();
       },
       error: function(xhr, errmsg, err) {
+        alertify.error('Error adding to cart');
       }
     });
   });
 </script>
+
 {% endblock %}

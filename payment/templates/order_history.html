@@ -21,10 +21,10 @@
                 {% for order in orders %}
                 <tr>
                     <td>{{ order.id }}</td>
-                    <td>{{ order.date_ordered|date:"M d, Y H:i" }}</td>
+                    <td>{{ order.date_ordered}}</td>
                     <td>Rs.{{ order.total_amount }}</td>
                     <td>{{ order.shipping_status|yesno:"Shipped,Not Shipped" }}</td>
-                    <td>{{ order.date_shipped|date:"M d, Y H:i" }}</td>
+                    <td>{{ order.date_shipped}}</td>
                     <td><a href="{% url 'order_confirmation' order.id %}" class="btn btn-info">View Details</a></td>
                 </tr>
                 {% endfor %}
