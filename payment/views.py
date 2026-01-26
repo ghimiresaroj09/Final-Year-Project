@@ -17,6 +17,18 @@ from xhtml2pdf import pisa
 def checkout(request):
     cart = Cart(request)
     if request.method == 'POST':
+        # Validate stock before creating order
+        cart_quantities = cart.get_quantity()
+        for product_id, quantity in cart_quantities.items():
+            product = get_object_or_404(Product, id=product_id)
+            if product.on_stock < quantity:
+                messages.error(
+                    request,
+                    f'Not enough stock for "{product.name}". Available: {product.on_stock}, requested: {quantity}. '
+                    'Please update your cart.',
+                )
+                return redirect('cart_summary')
+
         # Get user information from request
         full_name = request.POST.get('full_name')
         email = request.POST.get('email')
@@ -31,7 +43,7 @@ def checkout(request):
             total_amount=cart.cart_total(),  # Calculate total amount
         )
 
-        # Create Order Items
+        # Create Order Items and decrease stock
         for product_id, quantity in cart.get_quantity().items():
             product = get_object_or_404(Product, id=product_id)
             unit_price = product.sale_price if product.is_sale else product.price
@@ -43,6 +55,9 @@ def checkout(request):
                 unit_price=unit_price,
                 subtotal=unit_price * quantity,
             )
+            # Decrease on_stock; save() will set out_of_stock when on_stock == 0
+            product.on_stock -= quantity
+            product.save(update_fields=['on_stock', 'out_of_stock'])
 
         order_items = OrderItem.objects.filter(order=order)
 

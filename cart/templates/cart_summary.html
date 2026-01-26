@@ -101,6 +101,29 @@
   color: #dc3545;
 }
 
+.cart-item-stock {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: rgba(13, 176, 75, 0.12);
+  color: #0db04b;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+.cart-item-stock.low {
+  background: rgba(255, 193, 7, 0.2);
+  color: #856404;
+}
+
+.cart-item-stock.out {
+  background: rgba(220, 53, 69, 0.12);
+  color: #dc3545;
+}
+
 .quantity-adjustment {
   display: flex;
   align-items: center;
@@ -350,6 +373,23 @@
                       {% endif %}
                     </div>
 
+                    {% for key, val in quantities.items %}
+                      {% if key == product.id|stringformat:'s' %}
+                    <div class="cart-item-stock {% if product.on_stock == 0 %}out{% elif val > product.on_stock or product.on_stock <= 3 %}low{% endif %}">
+                      <i class="bi bi-box-seam"></i>
+                      In stock: {{ product.on_stock }}{% if val > product.on_stock %} — reduce quantity to {{ product.on_stock }} or less to checkout{% endif %}
+                    </div>
+                      {% endif %}
+                    {% endfor %}
+                    {% with pid=product.id|stringformat:'s' %}
+                    {% if pid not in quantities %}
+                    <div class="cart-item-stock {% if product.on_stock == 0 %}out{% elif product.on_stock <= 3 %}low{% endif %}">
+                      <i class="bi bi-box-seam"></i>
+                      In stock: {{ product.on_stock }}
+                    </div>
+                    {% endif %}
+                    {% endwith %}
+
                     <div class="quantity-adjustment">
                       <button type="button" class="qty-btn decrement-btn" id="decrement{{ product.id }}" aria-label="Decrease quantity">
                         <i class="bi bi-dash-lg"></i>
@@ -359,6 +399,7 @@
                         class="qty-input" 
                         id="qty{{ product.id }}" 
                         value="{% for key, value in quantities.items %}{% if key == product.id|stringformat:'s' %}{{ value }}{% endif %}{% endfor %}" 
+                        data-max="{{ product.on_stock }}"
                         readonly
                       />
                       <button type="button" class="qty-btn increment-btn" id="increment{{ product.id }}" aria-label="Increase quantity">
@@ -384,6 +425,15 @@
         <div class="col-lg-4">
           <div class="cart-summary">
             <h3>Order Summary</h3>
+            
+            <div class="summary-row" style="flex-direction: column; align-items: stretch; gap: 8px;">
+              <span style="font-weight: 600; color: #0f1419;">Stock</span>
+              {% for product in cart_products %}
+              <span style="font-size: 14px; color: #666;">
+                <i class="bi bi-box-seam" style="color: #0db04b;"></i> {{ product.name|truncatewords:4 }}: <strong>{{ product.on_stock }}</strong> in stock
+              </span>
+              {% endfor %}
+            </div>
             
             <div class="summary-row">
               <span>Subtotal</span>
@@ -423,18 +473,19 @@
 </div>
 
 <script>
-  // Update quantity with + and - buttons
+  // Update quantity with + and - buttons (capped at on_stock)
   document.querySelectorAll('.qty-btn').forEach(button => {
     button.addEventListener('click', function(e) {
       e.preventDefault();
       const productId = this.id.replace(/^(increment|decrement)/, '');
       const qtyInput = document.getElementById('qty' + productId);
       let currentValue = parseInt(qtyInput.value);
+      const maxQty = parseInt(qtyInput.dataset.max || '999');
 
       if (this.classList.contains('decrement-btn') && currentValue > 1) {
         qtyInput.value = currentValue - 1;
       }
-      if (this.classList.contains('increment-btn') && currentValue < 10) {
+      if (this.classList.contains('increment-btn') && currentValue < maxQty) {
         qtyInput.value = currentValue + 1;
       }
     });
@@ -459,7 +510,8 @@
         location.reload();
       },
       error: function(xhr, errmsg, err) {
-        alertify.error('Error updating cart');
+        var msg = (xhr.responseJSON && xhr.responseJSON.message) ? xhr.responseJSON.message : 'Error updating cart';
+        alertify.error(msg);
       }
     });
   });

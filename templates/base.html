@@ -100,6 +100,7 @@
             <h5 style="color: white; font-weight: 700; margin-bottom: 15px;">Quick Links</h5>
             <ul style="list-style: none; padding: 0; margin: 0;">
               <li><a href="{% url 'home' %}" style="color: rgba(255, 255, 255, 0.8); font-size: 14px;">Home</a></li>
+              <li><a href="{% url 'product_catalog' %}" style="color: rgba(255, 255, 255, 0.8); font-size: 14px;">Products</a></li>
               <li><a href="{% url 'sale' %}" style="color: rgba(255, 255, 255, 0.8); font-size: 14px;">Sale</a></li>
               <li><a href="{% url 'blog:blog_list' %}" style="color: rgba(255, 255, 255, 0.8); font-size: 14px;">Blog & News</a></li>
               <li><a href="{% url 'cart_summary' %}" style="color: rgba(255, 255, 255, 0.8); font-size: 14px;">Cart</a></li>
@@ -131,7 +132,7 @@
       {% if messages%} 
         {% for message in messages %}
           alertify.set('notifier','position', 'top-right');
-          alertify.success('{{message}}');
+          {% if message.tags == 'error' %}alertify.error('{{ message }}');{% else %}alertify.success('{{ message }}');{% endif %}
         {% endfor %}
       {% endif %} 
     </script>

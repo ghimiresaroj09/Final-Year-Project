@@ -2,226 +2,1021 @@
 {% load static %}
 {% block content %}
 
-<!-- Hero Section -->
-<section class="hero-section">
-  <div class="hero-content">
-    <h1 class="hero-title">Fresh Organic Products</h1>
-    <p class="hero-subtitle">Direct from Farm to Your Table</p>
+<!-- Carousel Section -->
+{% if carousels %}
+<section id="carousel-section" class="carousel-section">
+  <div id="homeCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+    <div class="carousel-indicators">
+      {% for carousel in carousels %}
+      <button type="button" data-bs-target="#homeCarousel" data-bs-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active" aria-current="true"{% endif %} aria-label="Slide {{ forloop.counter }}"></button>
+      {% endfor %}
+    </div>
+    <div class="carousel-inner">
+      {% for carousel in carousels %}
+      <div class="carousel-item {% if forloop.first %}active{% endif %}">
+        {% if carousel.link %}
+        <a href="{{ carousel.link }}">
+        {% endif %}
+        <img src="{{ carousel.image.url }}" class="d-block w-100 carousel-image" alt="{{ carousel.title }}">
+        <div class="carousel-caption">
+          <h1 class="carousel-title">{{ carousel.title }}</h1>
+          {% if carousel.subtitle %}
+          <p class="carousel-subtitle">{{ carousel.subtitle }}</p>
+          {% endif %}
+        </div>
+        {% if carousel.link %}
+        </a>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#homeCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#homeCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
   </div>
 </section>
+{% endif %}
 
-<!-- Products Section -->
-<section class="py-5">
-  <div class="container px-4 px-lg-5">
-    {% for category, products in catwise.items %}
-      <div class="category-section">
-        <div class="category-header">
-          <div class="category-title-container">
-            <i class="bi bi-leaf category-icon"></i>
-            <h2>{{ category.name }}</h2>
-          </div>
-          <a href="{% url 'category' category.name %}" class="view-all-btn">
-            View All <i class="bi bi-arrow-right ms-2"></i>
-          </a>
-        </div>
-        
-        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4">
-          {% for product in products %}
-            <div class="col mb-5">
-              <div class="product-card">
-                <div class="product-image-wrapper">
-                  <div class="image-container">
-                    <a href="{% url 'product' product.id %}">
-                      <img class="product-image" src="{{ product.image.url }}" alt="{{ product.name }}">
-                    </a>
-                  </div>
-                  {% if not product.out_of_stock %}
-                    {% if product.is_sale %}
-                      <div class="product-badge sale-badge">
-                        <i class="bi bi-tag-fill me-1"></i>Sale
-                      </div>
-                    {% endif %}
-                  {% else %}
-                    <div class="product-badge out-of-stock-badge">
-                      Out of Stock
-                    </div>
-                  {% endif %}
-                </div>
-                
-                <div class="card-body p-4">
-                  <div class="text-center">
-                    <a href="{% url 'product' product.id %}" class="product-link">
-                      <h5 class="product-name fw-bolder">{{ product.name }}</h5>
-                    </a>
-                    
-                    {% if not product.out_of_stock %}
-                      {% if product.is_sale %}
-                        <div class="product-price">
-                          <span class="original-price"><strike>Rs.{{ product.price }}</strike></span>
-                          <span class="sale-price">Rs.{{ product.sale_price }}</span>
-                        </div>
-                      {% else %}
-                        <div class="product-price">
-                          <span class="current-price">Rs.{{ product.price }}</span>
-                        </div>
-                      {% endif %}
-                    {% endif %}
-                  </div>
-                </div>
-                
-                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                  <div class="text-center">
-                    {% if not product.out_of_stock %}
-                      <div class="quantity-control mb-3">
-                        <button type="button" class="btn-qty decrement-btn" id="decrement{{ product.id }}" aria-label="Decrease quantity">
-                          <i class="bi bi-dash-lg"></i>
-                        </button>
-                        <input type="text" class="qty-input text-center" id="qty{{ product.id }}" value="1" readonly>
-                        <button type="button" class="btn-qty increment-btn" id="increment{{ product.id }}" aria-label="Increase quantity">
-                          <i class="bi bi-plus-lg"></i>
-                        </button>
-                      </div>
-                      <button type="button" data-index="{{ product.id }}" class="btn btn-outline-dark add-to-cart w-100">
-                        <i class="bi bi-cart-plus me-2"></i>Add to Cart
-                      </button>
-                    {% else %}
-                      <button type="button" class="btn btn-outline-dark w-100" disabled>
-                        <i class="bi bi-exclamation-circle me-2"></i>Out of Stock
-                      </button>
-                    {% endif %}
-                  </div>
-                </div>
-              </div>
-            </div>
-          {% endfor %}
+<!-- About Us Section -->
+{% if about_us %}
+<section id="about-section" class="about-section py-5">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-6 mb-4 mb-lg-0">
+        {% if about_us.image %}
+        <img src="{{ about_us.image.url }}" alt="{{ about_us.title }}" class="img-fluid rounded shadow">
+        {% endif %}
+      </div>
+      <div class="col-lg-6">
+        <h2 class="section-title">{{ about_us.title }}</h2>
+        <div class="about-content">
+          {{ about_us.content|linebreaks }}
         </div>
       </div>
-    {% endfor %}
+    </div>
   </div>
+</section>
+{% endif %}
 
-  <!-- Pagination links -->
-  {% if page_obj.paginator.num_pages > 1 %}
-    <div class="pagination">
-      {% if page_obj.has_previous %}
-        <a href="?page=1" class="page-link page-control">
-          <i class="bi bi-chevron-double-left"></i>
-        </a>
-        <a href="?page={{ page_obj.previous_page_number }}" class="page-link page-control">
-          <i class="bi bi-chevron-left"></i>
-        </a>
-      {% endif %}
-      
-      {% for num in page_obj.paginator.page_range %}
-        <a href="?page={{ num }}" class="page-link {% if num == page_obj.number %}current{% endif %}">
-          {{ num }}
-        </a>
+<!-- Who We Are / Stats Section -->
+{% if stats %}
+<section id="stats-section" class="stats-section py-5">
+  <div class="container">
+    <h2 class="section-title text-center mb-5">Who We Are</h2>
+    <div class="row g-4">
+      {% for stat in stats %}
+      <div class="col-md-6 col-lg-3">
+        <div class="stat-card text-center">
+          <div class="stat-icon">
+            <i class="{{ stat.icon }}"></i>
+          </div>
+          <h3 class="stat-value">{{ stat.value }}+</h3>
+          <p class="stat-label">{{ stat.label|default:stat.get_stat_type_display }}</p>
+        </div>
+      </div>
       {% endfor %}
-      
-      {% if page_obj.has_next %}
-        <a href="?page={{ page_obj.next_page_number }}" class="page-link page-control">
-          <i class="bi bi-chevron-right"></i>
-        </a>
-        <a href="?page={{ page_obj.paginator.num_pages }}" class="page-link page-control">
-          <i class="bi bi-chevron-double-right"></i>
-        </a>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- Top Sales Section -->
+{% if top_sales %}
+<section id="top-sales-section" class="top-sales-section py-5">
+  <div class="container">
+    <div class="section-header mb-5">
+      <h2 class="section-title">Top Sales</h2>
+      <a href="{% url 'sale' %}" class="view-all-link">Explore More<i class="bi bi-arrow-right ms-2"></i></a>
+    </div>
+    <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-4">
+      {% for product in top_sales %}
+      <div class="col mb-5">
+        <div class="product-card">
+          <div class="product-image-wrapper">
+            <div class="image-container">
+              <a href="{% url 'product' product.id %}">
+                <img class="product-image" src="{{ product.image.url }}" alt="{{ product.name }}">
+              </a>
+            </div>
+            <div class="product-badge sale-badge">
+              <i class="bi bi-tag-fill me-1"></i>Sale
+            </div>
+            <div class="savings-badge">
+              Save Rs. {{ product.savings }}
+            </div>
+          </div>
+          
+          <div class="card-body p-4">
+            <div class="text-center">
+              <a href="{% url 'product' product.id %}" class="product-link">
+                <h5 class="product-name fw-bolder">{{ product.name }}</h5>
+              </a>
+              <div class="product-price">
+                <span class="original-price"><strike>Rs.{{ product.price }}</strike></span>
+                <span class="sale-price">Rs.{{ product.sale_price }}</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+            <div class="text-center">
+              <a href="{% url 'product' product.id %}" class="btn btn-outline-dark w-100">
+                <i class="bi bi-eye me-2"></i>View Product
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- Testimonials Section -->
+{% if testimonials %}
+<section id="testimonials-section" class="testimonials-section py-5">
+  <div class="container">
+    <h2 class="section-title text-center mb-5">What Our Customers Say</h2>
+    <div id="testimonialsCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+      <div class="carousel-inner">
+        {% for testimonial in testimonials %}
+          {% if forloop.counter0|divisibleby:3 %}
+            {% if not forloop.first %}</div></div>{% endif %}
+            <div class="carousel-item {% if forloop.counter0 == 0 %}active{% endif %}">
+              <div class="row g-4">
+          {% endif %}
+                <div class="col-md-4">
+                  <div class="testimonial-card">
+                    <div class="testimonial-rating">
+                      {% for i in "12345"|make_list %}
+                      <i class="bi bi-star{% if forloop.counter <= testimonial.rating %}-fill{% endif %}"></i>
+                      {% endfor %}
+                    </div>
+                    <p class="testimonial-content">"{{ testimonial.content }}"</p>
+                    <div class="testimonial-author">
+                      {% if testimonial.image %}
+                      <img src="{{ testimonial.image.url }}" alt="{{ testimonial.name }}" class="testimonial-image">
+                      {% endif %}
+                      <div>
+                        <h5 class="testimonial-name">{{ testimonial.name }}</h5>
+                        {% if testimonial.role %}
+                        <p class="testimonial-role">{{ testimonial.role }}</p>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+          {% if forloop.last %}</div></div>{% endif %}
+        {% endfor %}
+      </div>
+      {% if testimonials|length > 3 %}
+      <button class="carousel-control-prev testimonial-control" type="button" data-bs-target="#testimonialsCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next testimonial-control" type="button" data-bs-target="#testimonialsCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
       {% endif %}
     </div>
-  {% endif %}
+  </div>
+</section>
+{% endif %}
+
+<!-- Featured Blogs Section -->
+{% if featured_blogs %}
+<section id="blogs-section" class="blogs-section py-5">
+  <div class="container">
+    <div class="section-header mb-5">
+      <h2 class="section-title">Featured Blogs</h2>
+      <a href="{% url 'blog:blog_list' %}" class="view-all-link">View All Blogs <i class="bi bi-arrow-right ms-2"></i></a>
+    </div>
+    <div class="row g-4">
+      {% for blog in featured_blogs %}
+      <div class="col-md-6 col-lg-4">
+        <div class="blog-card">
+          {% if blog.featured_image %}
+          <a href="{% url 'blog:blog_detail' blog.slug %}">
+            <img src="{{ blog.featured_image.url }}" alt="{{ blog.title }}" class="blog-image">
+          </a>
+          {% endif %}
+          <div class="blog-body">
+            <div class="blog-meta">
+              <span class="blog-date"><i class="bi bi-calendar me-1"></i>{{ blog.published_at|date:"M d, Y" }}</span>
+              <span class="blog-reading-time"><i class="bi bi-clock me-1"></i>{{ blog.reading_time }} min read</span>
+            </div>
+            <h3 class="blog-title">
+              <a href="{% url 'blog:blog_detail' blog.slug %}">{{ blog.title }}</a>
+            </h3>
+            <p class="blog-excerpt">{{ blog.excerpt|truncatewords:20 }}</p>
+            <a href="{% url 'blog:blog_detail' blog.slug %}" class="blog-read-more">Read More <i class="bi bi-arrow-right ms-1"></i></a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- Our Team Section -->
+{% if team_members %}
+<section id="team-section" class="team-section py-5">
+  <div class="container">
+    <h2 class="section-title text-center mb-5">Our Team</h2>
+    <div id="teamCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+      <div class="carousel-inner">
+        {% for member in team_members %}
+          {% if forloop.counter0|divisibleby:3 %}
+            {% if not forloop.first %}</div></div>{% endif %}
+            <div class="carousel-item {% if forloop.counter0 == 0 %}active{% endif %}">
+              <div class="row g-4">
+          {% endif %}
+                <div class="col-md-4">
+                  <div class="team-card">
+                    <div class="team-image-wrapper">
+                      <img src="{{ member.image.url }}" alt="{{ member.name }}" class="team-image">
+                      <div class="team-overlay">
+                        <div class="team-social">
+                          {% if member.facebook %}
+                          <a href="{{ member.facebook }}" target="_blank" class="social-link"><i class="bi bi-facebook"></i></a>
+                          {% endif %}
+                          {% if member.twitter %}
+                          <a href="{{ member.twitter }}" target="_blank" class="social-link"><i class="bi bi-twitter"></i></a>
+                          {% endif %}
+                          {% if member.linkedin %}
+                          <a href="{{ member.linkedin }}" target="_blank" class="social-link"><i class="bi bi-linkedin"></i></a>
+                          {% endif %}
+                          {% if member.instagram %}
+                          <a href="{{ member.instagram }}" target="_blank" class="social-link"><i class="bi bi-instagram"></i></a>
+                          {% endif %}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="team-body">
+                      <h3 class="team-name">{{ member.name }}</h3>
+                      <p class="team-position">{{ member.position }}</p>
+                      {% if member.bio %}
+                      <p class="team-bio">{{ member.bio|truncatewords:20 }}</p>
+                      {% endif %}
+                      {% if member.email %}
+                      <a href="mailto:{{ member.email }}" class="team-email"><i class="bi bi-envelope me-1"></i>{{ member.email }}</a>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+          {% if forloop.last %}</div></div>{% endif %}
+        {% endfor %}
+      </div>
+      {% if team_members|length > 3 %}
+      <button class="carousel-control-prev team-control" type="button" data-bs-target="#teamCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next team-control" type="button" data-bs-target="#teamCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- Contact Us Section -->
+<section id="contact-section" class="contact-section py-5">
+  <div class="container">
+    <h2 class="section-title text-center mb-5">Contact Us</h2>
+    <div class="row g-4">
+      <!-- Support Information (Left Side) -->
+      <div class="col-lg-6">
+        <div class="support-section">
+          {% if support %}
+          <h3 class="support-title">{{ support.title }}</h3>
+          {% if support.description %}
+          <p class="support-description">{{ support.description }}</p>
+          {% endif %}
+          
+          <div class="support-info">
+            {% if support.phone %}
+            <div class="support-item">
+              <div class="support-icon">
+                <i class="bi bi-telephone-fill"></i>
+              </div>
+              <div class="support-content">
+                <h4 class="support-label">Phone</h4>
+                <a href="tel:{{ support.phone }}" class="support-value">{{ support.phone }}</a>
+              </div>
+            </div>
+            {% endif %}
+            
+            {% if support.email %}
+            <div class="support-item">
+              <div class="support-icon">
+                <i class="bi bi-envelope-fill"></i>
+              </div>
+              <div class="support-content">
+                <h4 class="support-label">Email</h4>
+                <a href="mailto:{{ support.email }}" class="support-value">{{ support.email }}</a>
+              </div>
+            </div>
+            {% endif %}
+            
+            {% if support.address %}
+            <div class="support-item">
+              <div class="support-icon">
+                <i class="bi bi-geo-alt-fill"></i>
+              </div>
+              <div class="support-content">
+                <h4 class="support-label">Address</h4>
+                <p class="support-value">{{ support.address|linebreaks }}</p>
+              </div>
+            </div>
+            {% endif %}
+            
+            {% if support.working_hours %}
+            <div class="support-item">
+              <div class="support-icon">
+                <i class="bi bi-clock-fill"></i>
+              </div>
+              <div class="support-content">
+                <h4 class="support-label">Working Hours</h4>
+                <p class="support-value">{{ support.working_hours }}</p>
+              </div>
+            </div>
+            {% endif %}
+          </div>
+          {% else %}
+          <div class="support-placeholder">
+            <p>Support information will be displayed here. Please add support details in the admin panel.</p>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+      
+      <!-- Contact Form (Right Side) -->
+      <div class="col-lg-6">
+        <form method="POST" class="contact-form">
+          {% csrf_token %}
+          <div class="row g-3">
+            <div class="col-12">
+              <label for="name" class="form-label">Name <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="name" name="name" required>
+            </div>
+            <div class="col-12">
+              <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
+              <input type="email" class="form-control" id="email" name="email" required>
+            </div>
+            <div class="col-12">
+              <label for="phone" class="form-label">Phone</label>
+              <input type="tel" class="form-control" id="phone" name="phone">
+            </div>
+            <div class="col-12">
+              <label for="subject" class="form-label">Subject <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="subject" name="subject" required>
+            </div>
+            <div class="col-12">
+              <label for="message" class="form-label">Message <span class="text-danger">*</span></label>
+              <textarea class="form-control" id="message" name="message" rows="4" required></textarea>
+            </div>
+            <div class="col-12">
+              <button type="submit" class="btn btn-primary w-100">
+                <i class="bi bi-send me-2"></i>Send Message
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 </section>
 
 <style>
-/* Hero Section */
-.hero-section {
-  background: linear-gradient(135deg, #0db04b 0%, #0a9a3f 100%);
-  color: white;
-  padding: 60px 20px;
-  text-align: center;
-  margin-bottom: 40px;
-  position: relative;
-  overflow: hidden;
+/* Carousel Section */
+.carousel-section {
+  margin-bottom: 0;
 }
 
-.hero-section::before {
-  content: '';
+.carousel-item {
+  height: 500px;
+  position: relative;
+}
+
+.carousel-image {
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.7);
+}
+
+.carousel-caption {
   position: absolute;
-  top: -50%;
-  right: -10%;
-  width: 400px;
-  height: 400px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 10;
 }
 
-.hero-content {
-  position: relative;
-  z-index: 1;
-}
-
-.hero-title {
+.carousel-title {
   font-size: 48px;
   font-weight: 800;
-  margin-bottom: 10px;
-  letter-spacing: -1px;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+  margin-bottom: 15px;
 }
 
-.hero-subtitle {
+.carousel-subtitle {
   font-size: 20px;
-  font-weight: 300;
-  opacity: 0.9;
-  letter-spacing: 0.5px;
+  color: white;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
 }
 
-/* Category Section */
-.category-section {
-  margin-bottom: 60px;
+/* Section Styles */
+.section-title {
+  font-size: 36px;
+  font-weight: 800;
+  color: #0f1419;
+  margin-bottom: 20px;
+  position: relative;
+  padding-bottom: 15px;
 }
 
-.category-header {
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(90deg, #0db04b 0%, #85d764 100%);
+  border-radius: 2px;
+}
+
+.section-subtitle {
+  color: #666;
+  font-size: 18px;
+}
+
+.section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 35px;
-  gap: 20px;
   flex-wrap: wrap;
+  gap: 20px;
 }
 
-.category-title-container {
+.view-all-link {
+  color: #0db04b;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 16px;
+  display: inline-flex;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.view-all-link:hover {
+  color: #0a9a3f;
+  transform: translateX(5px);
+}
+
+/* About Section */
+.about-section {
+  background: #f8f9fa;
+}
+
+.about-content {
+  font-size: 16px;
+  line-height: 1.8;
+  color: #555;
+}
+
+/* Stats Section */
+.stats-section {
+  background: linear-gradient(135deg, #0db04b 0%, #0a9a3f 100%);
+  color: white;
+}
+
+.stats-section .section-title {
+  color: white;
+}
+
+.stats-section .section-title::after {
+  background: white;
+}
+
+.stat-card {
+  padding: 30px 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-10px);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.stat-icon {
+  font-size: 48px;
+  margin-bottom: 15px;
+  color: white;
+}
+
+.stat-value {
+  font-size: 42px;
+  font-weight: 800;
+  color: white;
+  margin-bottom: 10px;
+}
+
+.stat-label {
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+}
+
+/* Top Sales Section */
+.top-sales-section {
+  background: #f8f9fa;
+}
+
+.savings-badge {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 25px;
+  font-weight: 700;
+  font-size: 14px;
+  z-index: 10;
+}
+
+/* Testimonials Section */
+.testimonials-section {
+  background: white;
+}
+
+.testimonial-card {
+  background: #f8f9fa;
+  padding: 30px;
+  border-radius: 15px;
+  height: 100%;
+  transition: all 0.3s ease;
+}
+
+.testimonial-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.testimonial-rating {
+  color: #ffc107;
+  font-size: 20px;
+  margin-bottom: 15px;
+}
+
+.testimonial-content {
+  font-size: 16px;
+  line-height: 1.8;
+  color: #555;
+  margin-bottom: 20px;
+  font-style: italic;
+}
+
+.testimonial-author {
   display: flex;
   align-items: center;
   gap: 15px;
 }
 
-.category-icon {
-  font-size: 32px;
+.testimonial-image {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.testimonial-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0f1419;
+  margin: 0;
+}
+
+.testimonial-role {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+}
+
+.testimonial-control {
+  width: 50px;
+  height: 50px;
+  background: #0db04b;
+  border-radius: 50%;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0.8;
+  transition: all 0.3s ease;
+}
+
+.testimonial-control:hover {
+  opacity: 1;
+  background: #0a9a3f;
+}
+
+.testimonial-control .carousel-control-prev-icon,
+.testimonial-control .carousel-control-next-icon {
+  width: 20px;
+  height: 20px;
+}
+
+/* Team Section */
+.team-section {
+  background: #f8f9fa;
+}
+
+.team-card {
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
+  height: 100%;
+}
+
+.team-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+}
+
+.team-image-wrapper {
+  position: relative;
+  overflow: hidden;
+  height: 300px;
+}
+
+.team-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.team-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(13, 176, 75, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.team-card:hover .team-overlay {
+  opacity: 1;
+}
+
+.team-card:hover .team-image {
+  transform: scale(1.1);
+}
+
+.team-social {
+  display: flex;
+  gap: 15px;
+}
+
+.social-link {
+  width: 45px;
+  height: 45px;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: #0db04b;
-  animation: leaf-float 3s ease-in-out infinite;
+  font-size: 20px;
+  text-decoration: none;
+  transition: all 0.3s ease;
 }
 
-@keyframes leaf-float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-8px); }
+.social-link:hover {
+  background: #0db04b;
+  color: white;
+  transform: scale(1.1);
 }
 
-.view-all-btn {
+.team-body {
+  padding: 25px;
+  text-align: center;
+}
+
+.team-name {
+  font-size: 22px;
+  font-weight: 700;
+  color: #0f1419;
+  margin-bottom: 8px;
+}
+
+.team-position {
+  font-size: 16px;
+  color: #0db04b;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+.team-bio {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 15px;
+}
+
+.team-email {
+  color: #0db04b;
+  text-decoration: none;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  transition: color 0.3s ease;
+}
+
+.team-email:hover {
+  color: #0a9a3f;
+}
+
+.team-control {
+  width: 50px;
+  height: 50px;
+  background: #0db04b;
+  border-radius: 50%;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0.8;
+  transition: all 0.3s ease;
+}
+
+.team-control:hover {
+  opacity: 1;
+  background: #0a9a3f;
+}
+
+.team-control .carousel-control-prev-icon,
+.team-control .carousel-control-next-icon {
+  width: 20px;
+  height: 20px;
+}
+
+/* Blogs Section */
+.blogs-section {
+  background: #f8f9fa;
+}
+
+.blog-card {
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.blog-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+.blog-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.blog-card:hover .blog-image {
+  transform: scale(1.05);
+}
+
+.blog-body {
+  padding: 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.blog-meta {
+  display: flex;
+  gap: 15px;
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 15px;
+}
+
+.blog-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.blog-title a {
+  color: #0f1419;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.blog-title a:hover {
+  color: #0db04b;
+}
+
+.blog-excerpt {
+  color: #666;
+  line-height: 1.6;
+  flex: 1;
+  margin-bottom: 15px;
+}
+
+.blog-read-more {
   color: #0db04b;
   text-decoration: none;
   font-weight: 600;
-  font-size: 16px;
-  padding: 10px 20px;
-  border: 2px solid #0db04b;
-  border-radius: 25px;
-  transition: all 0.3s ease;
   display: inline-flex;
   align-items: center;
+  transition: all 0.3s ease;
 }
 
-.view-all-btn:hover {
-  background-color: #0db04b;
-  color: white;
+.blog-read-more:hover {
+  color: #0a9a3f;
   transform: translateX(5px);
 }
 
-/* Product Card */
+/* Contact Section */
+.contact-section {
+  background: white;
+}
+
+/* Support Section */
+.support-section {
+  background: #f8f9fa;
+  padding: 40px;
+  border-radius: 15px;
+  height: 100%;
+}
+
+.support-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #0f1419;
+  margin-bottom: 20px;
+  position: relative;
+  padding-bottom: 15px;
+}
+
+.support-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(90deg, #0db04b 0%, #85d764 100%);
+  border-radius: 2px;
+}
+
+.support-description {
+  font-size: 16px;
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 30px;
+}
+
+.support-info {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.support-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 20px;
+  background: white;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.support-item:hover {
+  transform: translateX(5px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.support-icon {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #0db04b 0%, #0a9a3f 100%);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.support-content {
+  flex: 1;
+}
+
+.support-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #666;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.support-value {
+  font-size: 16px;
+  color: #0f1419;
+  font-weight: 600;
+  margin: 0;
+  text-decoration: none;
+  display: block;
+  transition: color 0.3s ease;
+}
+
+.support-value:hover {
+  color: #0db04b;
+}
+
+.support-placeholder {
+  padding: 40px 20px;
+  text-align: center;
+  color: #666;
+  font-style: italic;
+}
+
+/* Contact Form */
+.contact-form {
+  background: #f8f9fa;
+  padding: 30px;
+  border-radius: 15px;
+  height: 100%;
+}
+
+.contact-form .form-label {
+  font-weight: 600;
+  color: #0f1419;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.contact-form .form-control {
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 10px 15px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.contact-form .form-control:focus {
+  border-color: #0db04b;
+  box-shadow: 0 0 0 3px rgba(13, 176, 75, 0.1);
+  outline: none;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #0db04b 0%, #0a9a3f 100%);
+  border: none;
+  padding: 12px 30px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(13, 176, 75, 0.4);
+}
+
+/* Product Card (reused from product catalog) */
 .product-card {
   background: white;
   border-radius: 15px;
@@ -248,6 +1043,9 @@
 }
 
 .product-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -262,27 +1060,10 @@
   display: flex;
   align-items: center;
   z-index: 10;
-  animation: badge-appear 0.4s ease;
-}
-
-@keyframes badge-appear {
-  from { 
-    opacity: 0;
-    transform: scale(0.8);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
 }
 
 .sale-badge {
   background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
-  color: white;
-}
-
-.out-of-stock-badge {
-  background: rgba(0, 0, 0, 0.8);
   color: white;
 }
 
@@ -326,135 +1107,90 @@
   font-weight: 700;
 }
 
-.current-price {
-  color: #0db04b;
-  font-size: 18px;
-  font-weight: 700;
-}
-
-/* Quantity Control */
-.quantity-control {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-}
-
-.btn-qty {
-  background-color: #f0f0f0;
-  border: none;
-  border-radius: 8px;
-  width: 36px;
-  height: 36px;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #0f1419;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-size: 16px;
-}
-
-.btn-qty:hover {
-  background-color: #0db04b;
-  color: white;
-  transform: scale(1.05);
-}
-
-.btn-qty:active {
-  transform: scale(0.95);
-}
-
-.qty-input {
-  width: 60px;
-  border: 2px solid #ddd;
-  border-radius: 8px;
-  padding: 6px 12px;
-  text-align: center;
-  font-weight: 600;
-  background-color: #fff;
-  color: #0f1419;
-}
-
-/* Page Control */
-.page-control {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  padding: 0 !important;
-}
-
 /* Responsive */
 @media (max-width: 768px) {
-  .hero-title {
-    font-size: 36px;
+  .carousel-title {
+    font-size: 32px;
   }
 
-  .hero-subtitle {
+  .carousel-subtitle {
     font-size: 16px;
   }
 
-  .category-header {
+  .section-title {
+    font-size: 28px;
+  }
+
+  .stat-value {
+    font-size: 32px;
+  }
+
+  .contact-form {
+    padding: 25px;
+  }
+
+  .support-section {
+    padding: 25px;
+    margin-bottom: 30px;
+  }
+
+  .support-title {
+    font-size: 24px;
+  }
+
+  .support-item {
+    padding: 15px;
+  }
+
+  .support-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+  }
+
+  .section-header {
     flex-direction: column;
     align-items: flex-start;
   }
 
-  .view-all-btn {
-    width: 100%;
-    justify-content: center;
+  .testimonial-control {
+    width: 40px;
+    height: 40px;
   }
 
-  .product-name {
+  .testimonial-control .carousel-control-prev-icon,
+  .testimonial-control .carousel-control-next-icon {
+    width: 15px;
+    height: 15px;
+  }
+
+  .team-image-wrapper {
+    height: 250px;
+  }
+
+  .team-body {
+    padding: 20px;
+  }
+
+  .team-name {
+    font-size: 20px;
+  }
+
+  .team-position {
     font-size: 14px;
-    min-height: 36px;
+  }
+
+  .team-control {
+    width: 40px;
+    height: 40px;
+  }
+
+  .team-control .carousel-control-prev-icon,
+  .team-control .carousel-control-next-icon {
+    width: 15px;
+    height: 15px;
   }
 }
 </style>
-
-<script>
-  // Update quantity with + and - buttons
-  document.querySelectorAll('.increment-btn, .decrement-btn').forEach(button => {
-    button.addEventListener('click', function(e) {
-      e.preventDefault();
-      const productId = this.id.replace(/^(increment|decrement)/, '');
-      const qtyInput = document.getElementById('qty' + productId);
-      let currentValue = parseInt(qtyInput.value);
-
-      if (this.classList.contains('decrement-btn') && currentValue > 1) {
-        qtyInput.value = currentValue - 1;
-      }
-      if (this.classList.contains('increment-btn') && currentValue < 10) {
-        qtyInput.value = currentValue + 1;
-      }
-    });
-  });
-
-  // Add to Cart
-  $(document).on('click', '.add-to-cart', function(e) {
-    e.preventDefault();
-    var productId = $(this).data('index');
-    var quantity = $('#qty' + productId).val();
-    var $button = $(this);
-
-    $.ajax({
-      type: 'POST',
-      url: '{% url 'cart_add' %}',
-      data: {
-        product_id: productId,
-        product_qty: quantity,
-        csrfmiddlewaretoken: '{{ csrf_token }}',
-        action: 'post'
-      },
-      success: function(json) {
-        location.reload();
-      },
-      error: function(xhr, errmsg, err) {
-        alertify.error('Error adding to cart');
-      }
-    });
-  });
-</script>
 
 {% endblock %}
