@@ -13,7 +13,7 @@
     </div>
     <div class="carousel-inner">
       {% for carousel in carousels %}
-      <div class="carousel-item {% if forloop.first %}active{% endif %}">
+      <div id="carousel-top-item" class="carousel-item {% if forloop.first %}active{% endif %}">
         {% if carousel.link %}
         <a href="{{ carousel.link }}">
         {% endif %}
@@ -58,28 +58,6 @@
           {{ about_us.content|linebreaks }}
         </div>
       </div>
-    </div>
-  </div>
-</section>
-{% endif %}
-
-<!-- Who We Are / Stats Section -->
-{% if stats %}
-<section id="stats-section" class="stats-section py-5">
-  <div class="container">
-    <h2 class="section-title text-center mb-5">Who We Are</h2>
-    <div class="row g-4">
-      {% for stat in stats %}
-      <div class="col-md-6 col-lg-3">
-        <div class="stat-card text-center">
-          <div class="stat-icon">
-            <i class="{{ stat.icon }}"></i>
-          </div>
-          <h3 class="stat-value">{{ stat.value }}+</h3>
-          <p class="stat-label">{{ stat.label|default:stat.get_stat_type_display }}</p>
-        </div>
-      </div>
-      {% endfor %}
     </div>
   </div>
 </section>
@@ -138,103 +116,6 @@
 </section>
 {% endif %}
 
-<!-- Testimonials Section -->
-{% if testimonials %}
-<section id="testimonials-section" class="testimonials-section py-5">
-  <div class="container">
-    <h2 class="section-title text-center mb-5">What Our Customers Say</h2>
-    
-    <!-- Desktop Carousel (3 per slide) -->
-    <div id="testimonialsCarouselDesktop" class="carousel slide d-none d-md-block" data-bs-ride="carousel" data-bs-interval="5000">
-      <div class="carousel-inner">
-        {% for testimonial in testimonials %}
-          {% if forloop.counter0|divisibleby:3 %}
-            {% if not forloop.first %}</div></div>{% endif %}
-            <div class="carousel-item {% if forloop.counter0 == 0 %}active{% endif %}">
-              <div class="row g-4">
-          {% endif %}
-                <div class="col-md-4">
-                  <div class="testimonials-card">
-                    <div class="testimonials-rating">
-                      {% for i in "12345"|make_list %}
-                      <i class="bi bi-star{% if forloop.counter <= testimonial.rating %}-fill{% endif %}"></i>
-                      {% endfor %}
-                    </div>
-                    <p class="testimonials-content">"{{ testimonial.content }}"</p>
-                    <div class="testimonials-author">
-                      {% if testimonial.image %}
-                      <img src="{{ testimonial.image.url }}" alt="{{ testimonial.name }}" class="testimonials-image">
-                      {% endif %}
-                      <div>
-                        <h5 class="testimonials-name">{{ testimonial.name }}</h5>
-                        {% if testimonial.role %}
-                        <p class="testimonials-role">{{ testimonial.role }}</p>
-                        {% endif %}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-          {% if forloop.last %}</div></div>{% endif %}
-        {% endfor %}
-      </div>
-      {% if testimonials|length > 3 %}
-      <button class="carousel-control-prev testimonials-control" type="button" data-bs-target="#testimonialsCarouselDesktop" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-      </button>
-      <button class="carousel-control-next testimonials-control" type="button" data-bs-target="#testimonialsCarouselDesktop" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-      </button>
-      {% endif %}
-    </div>
-
-    <!-- Mobile Carousel (1 per slide) -->
-    <div id="testimonialsCarouselMobile" class="carousel slide d-md-none" data-bs-ride="carousel" data-bs-interval="5000">
-      <div class="carousel-inner">
-        {% for testimonial in testimonials %}
-        <div class="carousel-item {% if forloop.first %}active{% endif %}">
-          <div class="row g-4 justify-content-center">
-            <div class="col-12">
-              <div class="testimonials-card">
-                <div class="testimonials-rating">
-                  {% for i in "12345"|make_list %}
-                  <i class="bi bi-star{% if forloop.counter <= testimonial.rating %}-fill{% endif %}"></i>
-                  {% endfor %}
-                </div>
-                <p class="testimonials-content">"{{ testimonial.content }}"</p>
-                <div class="testimonials-author">
-                  {% if testimonial.image %}
-                  <img src="{{ testimonial.image.url }}" alt="{{ testimonial.name }}" class="testimonials-image">
-                  {% endif %}
-                  <div>
-                    <h5 class="testimonials-name">{{ testimonial.name }}</h5>
-                    {% if testimonial.role %}
-                    <p class="testimonials-role">{{ testimonial.role }}</p>
-                    {% endif %}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        {% endfor %}
-      </div>
-      {% if testimonials|length > 1 %}
-      <button class="carousel-control-prev testimonials-control" type="button" data-bs-target="#testimonialsCarouselMobile" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-      </button>
-      <button class="carousel-control-next testimonials-control" type="button" data-bs-target="#testimonialsCarouselMobile" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-      </button>
-      {% endif %}
-    </div>
-  </div>
-</section>
-{% endif %}
-
 <!-- Featured Blogs Section -->
 {% if featured_blogs %}
 <section id="blogs-section" class="blogs-section py-5">
@@ -263,6 +144,28 @@
             <p class="blog-excerpt">{{ blog.excerpt|truncatewords:20 }}</p>
             <a href="{% url 'blog:blog_detail' blog.slug %}" class="blog-read-more">Read More <i class="bi bi-arrow-right ms-1"></i></a>
           </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- Who We Are / Stats Section -->
+{% if stats %}
+<section id="stats-section" class="stats-section py-5">
+  <div class="container">
+    <h2 class="section-title text-center mb-5">Who We Are</h2>
+    <div class="row g-4">
+      {% for stat in stats %}
+      <div class="col-md-6 col-lg-3">
+        <div class="stat-card text-center">
+          <div class="stat-icon">
+            <i class="{{ stat.icon }}"></i>
+          </div>
+          <h3 class="stat-value">{{ stat.value }}+</h3>
+          <p class="stat-label">{{ stat.label|default:stat.get_stat_type_display }}</p>
         </div>
       </div>
       {% endfor %}
@@ -402,6 +305,105 @@
 </section>
 {% endif %}
 
+
+<!-- Testimonials Section -->
+{% if testimonials %}
+<section id="testimonials-section" class="testimonials-section py-5">
+  <div class="container">
+    <h2 class="section-title text-center mb-5">What Our Customers Say</h2>
+    
+    <!-- Desktop Carousel (3 per slide) -->
+    <div id="testimonialsCarouselDesktop" class="carousel slide d-none d-md-block" data-bs-ride="carousel" data-bs-interval="5000">
+      <div class="carousel-inner">
+        {% for testimonial in testimonials %}
+          {% if forloop.counter0|divisibleby:3 %}
+            {% if not forloop.first %}</div></div>{% endif %}
+            <div class="carousel-item {% if forloop.counter0 == 0 %}active{% endif %}">
+              <div class="row g-4">
+          {% endif %}
+                <div class="col-md-4">
+                  <div class="testimonials-card">
+                    <div class="testimonials-rating">
+                      {% for i in "12345"|make_list %}
+                      <i class="bi bi-star{% if forloop.counter <= testimonial.rating %}-fill{% endif %}"></i>
+                      {% endfor %}
+                    </div>
+                    <p class="testimonials-content">"{{ testimonial.content }}"</p>
+                    <div class="testimonials-author">
+                      {% if testimonial.image %}
+                      <img src="{{ testimonial.image.url }}" alt="{{ testimonial.name }}" class="testimonials-image">
+                      {% endif %}
+                      <div>
+                        <h5 class="testimonials-name">{{ testimonial.name }}</h5>
+                        {% if testimonial.role %}
+                        <p class="testimonials-role">{{ testimonial.role }}</p>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+          {% if forloop.last %}</div></div>{% endif %}
+        {% endfor %}
+      </div>
+      {% if testimonials|length > 3 %}
+      <button class="carousel-control-prev testimonials-control" type="button" data-bs-target="#testimonialsCarouselDesktop" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next testimonials-control" type="button" data-bs-target="#testimonialsCarouselDesktop" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+      {% endif %}
+    </div>
+
+    <!-- Mobile Carousel (1 per slide) -->
+    <div id="testimonialsCarouselMobile" class="carousel slide d-md-none" data-bs-ride="carousel" data-bs-interval="5000">
+      <div class="carousel-inner">
+        {% for testimonial in testimonials %}
+        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+          <div class="row g-4 justify-content-center">
+            <div class="col-12">
+              <div class="testimonials-card">
+                <div class="testimonials-rating">
+                  {% for i in "12345"|make_list %}
+                  <i class="bi bi-star{% if forloop.counter <= testimonial.rating %}-fill{% endif %}"></i>
+                  {% endfor %}
+                </div>
+                <p class="testimonials-content">"{{ testimonial.content }}"</p>
+                <div class="testimonials-author">
+                  {% if testimonial.image %}
+                  <img src="{{ testimonial.image.url }}" alt="{{ testimonial.name }}" class="testimonials-image">
+                  {% endif %}
+                  <div>
+                    <h5 class="testimonials-name">{{ testimonial.name }}</h5>
+                    {% if testimonial.role %}
+                    <p class="testimonials-role">{{ testimonial.role }}</p>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% if testimonials|length > 1 %}
+      <button class="carousel-control-prev testimonials-control" type="button" data-bs-target="#testimonialsCarouselMobile" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next testimonials-control" type="button" data-bs-target="#testimonialsCarouselMobile" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+
 <!-- Contact Us Section -->
 <section id="contact-section" class="contact-section py-5">
   <div class="container">
@@ -448,10 +450,18 @@
               </div>
               <div class="support-content">
                 <h4 class="support-label">Address</h4>
-                <p class="support-value">{{ support.address|linebreaks }}</p>
+                <a
+                  href="https://www.google.com/maps/search/?api=1&query={{ support.address|urlencode }}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="support-value"
+                >
+                  {{ support.address }}
+                </a>
               </div>
             </div>
             {% endif %}
+
             
             {% if support.working_hours %}
             <div class="support-item">
@@ -511,46 +521,110 @@
 </section>
 
 <style>
-/* Carousel Section */
+/* =====================================================
+   Home Carousel Section — FULL STYLES
+===================================================== */
+
 .carousel-section {
   margin-bottom: 0;
-}
-
-.carousel-item {
-  height: 500px;
   position: relative;
 }
 
-.carousel-image {
+/* Carousel container */
+#homeCarousel {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Inner */
+#homeCarousel .carousel-inner {
+  height: 90vh;
+}
+
+/* Carousel items */
+#homeCarousel .carousel-item {
+  height: 90vh;
+  position: relative;
+}
+
+/* Image */
+#homeCarousel .carousel-image {
+  width: 100%;
   height: 100%;
   object-fit: cover;
   filter: brightness(0.7);
 }
 
-.carousel-caption {
+/* Caption */
+#homeCarousel .carousel-caption {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  width: 80%;
   text-align: center;
   z-index: 10;
 }
 
-.carousel-title {
+/* Title */
+#homeCarousel .carousel-title {
   font-size: 48px;
   font-weight: 800;
-  color: white;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+  color: #ffffff;
   margin-bottom: 15px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
-.carousel-subtitle {
+/* Subtitle */
+#homeCarousel .carousel-subtitle {
   font-size: 20px;
-  color: white;
-  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+  color: #ffffff;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
-/* Section Styles */
+/* =====================================================
+   Carousel Indicators (Dots)
+===================================================== */
+
+#homeCarousel .carousel-indicators {
+  bottom: 20px;
+  z-index: 15;
+}
+
+#homeCarousel .carousel-indicators [data-bs-target] {
+  width: 12px;
+  height: 12px;
+  margin: 0 6px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.6);
+  opacity: 1;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+#homeCarousel .carousel-indicators .active {
+  background-color: #0db04b;
+  transform: scale(1.2);
+}
+
+/* =====================================================
+   Controls (Arrows)
+===================================================== */
+
+#homeCarousel .carousel-control-prev,
+#homeCarousel .carousel-control-next {
+  width: 6%;
+  z-index: 15;
+}
+
+#homeCarousel .carousel-control-prev-icon,
+#homeCarousel .carousel-control-next-icon {
+  filter: brightness(0) invert(1);
+}
+
+/* =====================================================
+   Section Styles (Shared)
+===================================================== */
+
 .section-title {
   font-size: 36px;
   font-weight: 800;
@@ -598,28 +672,42 @@
   color: #0a9a3f;
   transform: translateX(5px);
 }
-/* Mobile devices (576px and below) */
+
+/* =====================================================
+   Mobile Responsive
+===================================================== */
+
 @media (max-width: 576px) {
-  .carousel-item {
-    height: 450px;
+
+  #homeCarousel .carousel-inner,
+  #homeCarousel .carousel-item {
+    height: 40vh;
   }
 
-  .carousel-title {
-    font-size: 20px;
+  #homeCarousel .carousel-caption {
+    width: 90%;
+  }
+
+  #homeCarousel .carousel-title {
+    font-size: 22px;
     margin-bottom: 8px;
   }
 
-  .carousel-subtitle {
+  #homeCarousel .carousel-subtitle {
     font-size: 14px;
   }
 
-  .carousel-caption {
-    width: 85%;
-    padding: 0 10px;
+  #homeCarousel .carousel-indicators {
+    bottom: 12px;
+  }
+
+  #homeCarousel .carousel-indicators [data-bs-target] {
+    width: 10px;
+    height: 10px;
   }
 
   .section-title {
-    font-size: 20px;
+    font-size: 22px;
     margin-bottom: 12px;
     padding-bottom: 10px;
   }
@@ -637,6 +725,7 @@
     font-size: 13px;
   }
 }
+
 
 
 /* About Section */
@@ -875,6 +964,10 @@
 .team-section {
   background: #f8f9fa;
   padding: 60px 0;
+}
+
+.team-section .carousel-item{
+  height: 500px;
 }
 
 .carousel-inner {
@@ -2001,18 +2094,6 @@ document.addEventListener('DOMContentLoaded', function() {
     content.className = 'chatbot-message-content';
     content.innerHTML = text;
     messageDiv.appendChild(content);
-
-    if (type === 'user') {
-      const avatar = document.createElement('div');
-      avatar.className = 'chatbot-avatar';
-      avatar.style.background = 'linear-gradient(135deg, #0db04b 0%, #0a9a3f 100%)';
-      avatar.style.display = 'flex';
-      avatar.style.alignItems = 'center';
-      avatar.style.justifyContent = 'center';
-      avatar.style.color = 'white';
-      avatar.innerHTML = '<i class="bi bi-person-fill"></i>';
-      messageDiv.appendChild(avatar);
-    }
 
     chatbotMessages.appendChild(messageDiv);
     scrollToBottom();
