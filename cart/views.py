@@ -32,9 +32,10 @@ def cart_add(request):
     if product.out_of_stock or product.on_stock == 0:
         return JsonResponse({'success': False, 'message': 'This product is out of stock.'}, status=400)
     existing = cart.cart.get(str(product_id), 0)
-    if existing + product_qty > product.on_stock:
+    max_allowed = min(10, product.on_stock)
+    if existing + product_qty > max_allowed:
         return JsonResponse(
-            {'success': False, 'message': f'Only {product.on_stock} in stock. You have {existing} in cart.'},
+            {'success': False, 'message': f'Maximum {max_allowed} allowed per product. You have {existing} in cart.'},
             status=400,
         )
     cart.add(product=product, quantity=product_qty)
@@ -61,9 +62,10 @@ def cart_update(request):
         product_id = int(request.POST.get('product_id'))
         product_qty = int(request.POST.get('product_qty'))
         product = get_object_or_404(Product, id=product_id)
-        if product_qty > product.on_stock:
+        max_allowed = min(10, product.on_stock)
+        if product_qty > max_allowed:
             return JsonResponse(
-                {'success': False, 'message': f'Only {product.on_stock} in stock.'},
+                {'success': False, 'message': f'Maximum {max_allowed} allowed per product.'},
                 status=400,
             )
         cart.update(product_id, product_qty)

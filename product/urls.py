@@ -8,4 +8,5 @@ urlpatterns = [
     path('category/<str:cname>',views.category, name='category'),
     path("search/", views.search, name="search"),
     path("sale/", views.sale, name="sale"),
+    path("chatbot/", views.chatbot, name="chatbot"),
 ]

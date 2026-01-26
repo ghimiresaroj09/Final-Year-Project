@@ -375,9 +375,9 @@
 
                     {% for key, val in quantities.items %}
                       {% if key == product.id|stringformat:'s' %}
-                    <div class="cart-item-stock {% if product.on_stock == 0 %}out{% elif val > product.on_stock or product.on_stock <= 3 %}low{% endif %}">
+                    <div class="cart-item-stock {% if product.on_stock == 0 %}out{% elif val > 10 or val > product.on_stock or product.on_stock <= 3 %}low{% endif %}">
                       <i class="bi bi-box-seam"></i>
-                      In stock: {{ product.on_stock }}{% if val > product.on_stock %} — reduce quantity to {{ product.on_stock }} or less to checkout{% endif %}
+                      In stock: {{ product.on_stock }}{% if val > 10 %} — maximum 10 per product{% elif val > product.on_stock %} — reduce quantity to {{ product.on_stock }} or less to checkout{% endif %}
                     </div>
                       {% endif %}
                     {% endfor %}
@@ -399,7 +399,7 @@
                         class="qty-input" 
                         id="qty{{ product.id }}" 
                         value="{% for key, value in quantities.items %}{% if key == product.id|stringformat:'s' %}{{ value }}{% endif %}{% endfor %}" 
-                        data-max="{{ product.on_stock }}"
+                        data-max="{% if product.on_stock < 10 %}{{ product.on_stock }}{% else %}10{% endif %}"
                         readonly
                       />
                       <button type="button" class="qty-btn increment-btn" id="increment{{ product.id }}" aria-label="Increase quantity">

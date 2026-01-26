@@ -98,11 +98,18 @@ def checkout(request):
 
 @login_required
 def order_confirmation(request, order_id):
-    order = get_object_or_404(
-        Order,
-        id=order_id,
-        user=request.user  # 🔒 ownership check
-    )
+
+    if request.user.is_staff or request.user.is_superuser:
+        # Admins can view any order
+        order = get_object_or_404(Order, id=order_id)
+    else:
+        # Regular users can only view their own orders
+        order = get_object_or_404(
+            Order,
+            id=order_id,
+            user=request.user
+        )
+
     order_items = OrderItem.objects.filter(order=order)
 
     context = {

@@ -428,7 +428,7 @@
                   class="qty-input-large" 
                   id="qty{{ product.id }}" 
                   value="1" 
-                  data-max="{{ product.on_stock }}"
+                  data-max="{% if product.on_stock < 10 %}{{ product.on_stock }}{% else %}10{% endif %}"
                   readonly
                 >
                 <button type="button" class="qty-btn-large" id="increment{{ product.id }}" aria-label="Increase quantity">

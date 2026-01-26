@@ -5,6 +5,9 @@ from django.contrib import messages
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django.db.models import F
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
 
 
 # Create your views here.
@@ -132,3 +135,132 @@ def home(request):
             messages.error(request, 'Please fill in all required fields.')
     
     return render(request, 'home.html', context)
+
+
+@csrf_exempt
+def chatbot(request):
+    """AI Chatbot endpoint that responds to queries about database information"""
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            message = data.get('message', '').lower().strip()
+            
+            if not message:
+                return JsonResponse({'response': 'Please ask me something about our products, team, sales, or stats!'})
+            
+            response = ""
+            
+            # Check for product-related queries
+            product_keywords = ['product', 'item', 'buy', 'price', 'cost', 'available', 'stock', 'category', 'categories']
+            team_keywords = ['team', 'member', 'staff', 'employee', 'who', 'people', 'person']
+            sales_keywords = ['sale', 'discount', 'offer', 'cheap', 'affordable', 'deal', 'promotion']
+            stats_keywords = ['stat', 'statistic', 'number', 'count', 'total', 'how many', 'customers', 'experience']
+            
+            message_lower = message.lower()
+            
+            # Product queries
+            if any(keyword in message_lower for keyword in product_keywords):
+                # Check for specific product name
+                products = Product.objects.filter(out_of_stock=False)
+                for product in products:
+                    if product.name.lower() in message_lower:
+                        response = f"<strong>{product.name}</strong><br>"
+                        response += f"Price: Rs. {product.sale_price if product.is_sale else product.price}<br>"
+                        if product.is_sale:
+                            response += f"<s>Original Price: Rs. {product.price}</s><br>"
+                            response += f"<span style='color: #dc3545;'>Save Rs. {product.savings}</span><br>"
+                        response += f"Stock: {product.on_stock} available<br>"
+                        response += f"Category: {product.category.name}<br>"
+                        if product.description:
+                            response += f"Description: {product.description}<br>"
+                        response += f"<a href='/product/{product.id}' style='color: #0db04b; text-decoration: underline;'>View Product</a>"
+                        return JsonResponse({'response': response})
+                
+                # Check for category
+                categories = Category.objects.all()
+                for category in categories:
+                    if category.name.lower() in message_lower:
+                        products_in_cat = Product.objects.filter(category=category, out_of_stock=False)
+                        response = f"<strong>Products in {category.name}:</strong><br>"
+                        if products_in_cat.exists():
+                            for p in products_in_cat[:5]:
+                                response += f"• {p.name} - Rs. {p.sale_price if p.is_sale else p.price}<br>"
+                            if products_in_cat.count() > 5:
+                                response += f"<br>...and {products_in_cat.count() - 5} more. <a href='/category/{category.name}' style='color: #0db04b;'>View all</a>"
+                        else:
+                            response += "No products available in this category."
+                        return JsonResponse({'response': response})
+                
+                # General product list
+                all_products = Product.objects.filter(out_of_stock=False)[:10]
+                if all_products.exists():
+                    response = f"<strong>Available Products:</strong><br>"
+                    for product in all_products:
+                        price = product.sale_price if product.is_sale else product.price
+                        sale_badge = " <span style='color: #dc3545;'>[SALE]</span>" if product.is_sale else ""
+                        response += f"• {product.name} - Rs. {price}{sale_badge}<br>"
+                    response += "<br><a href='/products/' style='color: #0db04b;'>View all products</a>"
+                else:
+                    response = "Sorry, no products are currently available."
+            
+            # Team member queries
+            elif any(keyword in message_lower for keyword in team_keywords):
+                team_members = TeamMember.objects.filter(is_active=True).order_by('order', 'name')
+                if team_members.exists():
+                    response = "<strong>Our Team:</strong><br>"
+                    for member in team_members:
+                        response += f"<strong>{member.name}</strong> - {member.position}<br>"
+                        if member.bio:
+                            response += f"{member.bio[:100]}...<br>"
+                        response += "<br>"
+                else:
+                    response = "Our team information is not available at the moment."
+            
+            # Sales queries
+            elif any(keyword in message_lower for keyword in sales_keywords):
+                sale_products = Product.objects.filter(is_sale=True, out_of_stock=False).annotate(
+                    savings_amount=F('price') - F('sale_price')
+                ).order_by('-savings_amount')[:10]
+                if sale_products.exists():
+                    response = "<strong>Products on Sale:</strong><br>"
+                    for product in sale_products:
+                        response += f"• <strong>{product.name}</strong><br>"
+                        response += f"  Price: <s>Rs. {product.price}</s> <span style='color: #dc3545;'>Rs. {product.sale_price}</span><br>"
+                        response += f"  Save: Rs. {product.savings}<br><br>"
+                    response += "<a href='/sale/' style='color: #0db04b;'>View all sales</a>"
+                else:
+                    response = "Currently, there are no products on sale."
+            
+            # Stats queries
+            elif any(keyword in message_lower for keyword in stats_keywords):
+                stats = Stat.objects.filter(is_active=True).order_by('order')
+                if stats.exists():
+                    response = "<strong>Our Statistics:</strong><br>"
+                    for stat in stats:
+                        response += f"<strong>{stat.get_stat_type_display()}:</strong> {stat.value}+<br>"
+                        if stat.label:
+                            response += f"{stat.label}<br>"
+                        response += "<br>"
+                else:
+                    response = "Statistics are not available at the moment."
+            
+            # Greeting or help
+            elif any(word in message_lower for word in ['hi', 'hello', 'hey', 'help', 'what can you do']):
+                response = "Hello! I'm your AI assistant. I can help you with:<br>"
+                response += "• <strong>Products</strong> - Ask about products, prices, categories, or stock<br>"
+                response += "• <strong>Sales</strong> - Ask about discounts and offers<br>"
+                response += "• <strong>Team</strong> - Ask about our team members<br>"
+                response += "• <strong>Stats</strong> - Ask about our statistics<br><br>"
+                response += "Try asking: 'What products do you have?', 'Show me sales', 'Tell me about your team', or 'What are your stats?'"
+            
+            # Default response
+            else:
+                response = "I can help you with information about our products, sales, team members, and statistics. "
+                response += "Try asking: 'What products do you have?', 'Show me sales', 'Tell me about your team', or 'What are your stats?'"
+            
+            return JsonResponse({'response': response})
+            
+        except Exception as e:
+            return JsonResponse({'response': f'Sorry, I encountered an error. Please try again. Error: {str(e)}'}, status=500)
+    
+    return JsonResponse({'response': 'Please send a POST request with your message.'}, status=400)
