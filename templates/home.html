@@ -143,7 +143,9 @@
 <section id="testimonials-section" class="testimonials-section py-5">
   <div class="container">
     <h2 class="section-title text-center mb-5">What Our Customers Say</h2>
-    <div id="testimonialsCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+    
+    <!-- Desktop Carousel (3 per slide) -->
+    <div id="testimonialsCarouselDesktop" class="carousel slide d-none d-md-block" data-bs-ride="carousel" data-bs-interval="5000">
       <div class="carousel-inner">
         {% for testimonial in testimonials %}
           {% if forloop.counter0|divisibleby:3 %}
@@ -152,21 +154,21 @@
               <div class="row g-4">
           {% endif %}
                 <div class="col-md-4">
-                  <div class="testimonial-card">
-                    <div class="testimonial-rating">
+                  <div class="testimonials-card">
+                    <div class="testimonials-rating">
                       {% for i in "12345"|make_list %}
                       <i class="bi bi-star{% if forloop.counter <= testimonial.rating %}-fill{% endif %}"></i>
                       {% endfor %}
                     </div>
-                    <p class="testimonial-content">"{{ testimonial.content }}"</p>
-                    <div class="testimonial-author">
+                    <p class="testimonials-content">"{{ testimonial.content }}"</p>
+                    <div class="testimonials-author">
                       {% if testimonial.image %}
-                      <img src="{{ testimonial.image.url }}" alt="{{ testimonial.name }}" class="testimonial-image">
+                      <img src="{{ testimonial.image.url }}" alt="{{ testimonial.name }}" class="testimonials-image">
                       {% endif %}
                       <div>
-                        <h5 class="testimonial-name">{{ testimonial.name }}</h5>
+                        <h5 class="testimonials-name">{{ testimonial.name }}</h5>
                         {% if testimonial.role %}
-                        <p class="testimonial-role">{{ testimonial.role }}</p>
+                        <p class="testimonials-role">{{ testimonial.role }}</p>
                         {% endif %}
                       </div>
                     </div>
@@ -176,11 +178,54 @@
         {% endfor %}
       </div>
       {% if testimonials|length > 3 %}
-      <button class="carousel-control-prev testimonial-control" type="button" data-bs-target="#testimonialsCarousel" data-bs-slide="prev">
+      <button class="carousel-control-prev testimonials-control" type="button" data-bs-target="#testimonialsCarouselDesktop" data-bs-slide="prev">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Previous</span>
       </button>
-      <button class="carousel-control-next testimonial-control" type="button" data-bs-target="#testimonialsCarousel" data-bs-slide="next">
+      <button class="carousel-control-next testimonials-control" type="button" data-bs-target="#testimonialsCarouselDesktop" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+      {% endif %}
+    </div>
+
+    <!-- Mobile Carousel (1 per slide) -->
+    <div id="testimonialsCarouselMobile" class="carousel slide d-md-none" data-bs-ride="carousel" data-bs-interval="5000">
+      <div class="carousel-inner">
+        {% for testimonial in testimonials %}
+        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+          <div class="row g-4 justify-content-center">
+            <div class="col-12">
+              <div class="testimonials-card">
+                <div class="testimonials-rating">
+                  {% for i in "12345"|make_list %}
+                  <i class="bi bi-star{% if forloop.counter <= testimonial.rating %}-fill{% endif %}"></i>
+                  {% endfor %}
+                </div>
+                <p class="testimonials-content">"{{ testimonial.content }}"</p>
+                <div class="testimonials-author">
+                  {% if testimonial.image %}
+                  <img src="{{ testimonial.image.url }}" alt="{{ testimonial.name }}" class="testimonials-image">
+                  {% endif %}
+                  <div>
+                    <h5 class="testimonials-name">{{ testimonial.name }}</h5>
+                    {% if testimonial.role %}
+                    <p class="testimonials-role">{{ testimonial.role }}</p>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% if testimonials|length > 1 %}
+      <button class="carousel-control-prev testimonials-control" type="button" data-bs-target="#testimonialsCarouselMobile" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next testimonials-control" type="button" data-bs-target="#testimonialsCarouselMobile" data-bs-slide="next">
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Next</span>
       </button>
@@ -231,7 +276,9 @@
 <section id="team-section" class="team-section py-5">
   <div class="container">
     <h2 class="section-title text-center mb-5">Our Team</h2>
-    <div id="teamCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+    
+    <!-- Desktop Carousel (3 per slide) -->
+    <div id="teamCarouselDesktop" class="carousel slide d-none d-md-block" data-bs-ride="carousel" data-bs-interval="5000">
       <div class="carousel-inner">
         {% for member in team_members %}
           {% if forloop.counter0|divisibleby:3 %}
@@ -269,6 +316,11 @@
                       {% if member.email %}
                       <a href="mailto:{{ member.email }}" class="team-email"><i class="bi bi-envelope me-1"></i>{{ member.email }}</a>
                       {% endif %}
+                      {% if member.phone %}
+                      <a href="tel:{{ member.phone }}" class="team-phone">
+                        <i class="bi bi-telephone-fill me-1"></i>{{ member.phone }}
+                      </a>
+                      {% endif %}
                     </div>
                   </div>
                 </div>
@@ -276,11 +328,71 @@
         {% endfor %}
       </div>
       {% if team_members|length > 3 %}
-      <button class="carousel-control-prev team-control" type="button" data-bs-target="#teamCarousel" data-bs-slide="prev">
+      <button class="carousel-control-prev team-control" type="button" data-bs-target="#teamCarouselDesktop" data-bs-slide="prev">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Previous</span>
       </button>
-      <button class="carousel-control-next team-control" type="button" data-bs-target="#teamCarousel" data-bs-slide="next">
+      <button class="carousel-control-next team-control" type="button" data-bs-target="#teamCarouselDesktop" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+      {% endif %}
+    </div>
+
+    <!-- Mobile Carousel (1 per slide) -->
+    <div id="teamCarouselMobile" class="carousel slide d-md-none" data-bs-ride="carousel" data-bs-interval="5000">
+      <div class="carousel-inner">
+        {% for member in team_members %}
+        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+          <div class="row g-4 justify-content-center">
+            <div class="col-12">
+              <div class="team-card">
+                <div class="team-image-wrapper">
+                  <img src="{{ member.image.url }}" alt="{{ member.name }}" class="team-image">
+                  <div class="team-overlay">
+                    <div class="team-social">
+                      {% if member.facebook %}
+                      <a href="{{ member.facebook }}" target="_blank" class="social-link"><i class="bi bi-facebook"></i></a>
+                      {% endif %}
+                      {% if member.twitter %}
+                      <a href="{{ member.twitter }}" target="_blank" class="social-link"><i class="bi bi-twitter"></i></a>
+                      {% endif %}
+                      {% if member.linkedin %}
+                      <a href="{{ member.linkedin }}" target="_blank" class="social-link"><i class="bi bi-linkedin"></i></a>
+                      {% endif %}
+                      {% if member.instagram %}
+                      <a href="{{ member.instagram }}" target="_blank" class="social-link"><i class="bi bi-instagram"></i></a>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+                <div class="team-body">
+                  <h3 class="team-name">{{ member.name }}</h3>
+                  <p class="team-position">{{ member.position }}</p>
+                  {% if member.bio %}
+                  <p class="team-bio">{{ member.bio|truncatewords:20 }}</p>
+                  {% endif %}
+                  {% if member.email %}
+                  <a href="mailto:{{ member.email }}" class="team-email"><i class="bi bi-envelope me-1"></i>{{ member.email }}</a>
+                  {% endif %}
+                  {% if member.phone %}
+                  <a href="tel:{{ member.phone }}" class="team-phone">
+                    <i class="bi bi-telephone-fill me-1"></i>{{ member.phone }}
+                  </a>
+                {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% if team_members|length > 1 %}
+      <button class="carousel-control-prev team-control" type="button" data-bs-target="#teamCarouselMobile" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next team-control" type="button" data-bs-target="#teamCarouselMobile" data-bs-slide="next">
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Next</span>
       </button>
@@ -486,6 +598,46 @@
   color: #0a9a3f;
   transform: translateX(5px);
 }
+/* Mobile devices (576px and below) */
+@media (max-width: 576px) {
+  .carousel-item {
+    height: 450px;
+  }
+
+  .carousel-title {
+    font-size: 20px;
+    margin-bottom: 8px;
+  }
+
+  .carousel-subtitle {
+    font-size: 14px;
+  }
+
+  .carousel-caption {
+    width: 85%;
+    padding: 0 10px;
+  }
+
+  .section-title {
+    font-size: 20px;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+  }
+
+  .section-title::after {
+    width: 45px;
+    height: 3px;
+  }
+
+  .section-subtitle {
+    font-size: 14px;
+  }
+
+  .view-all-link {
+    font-size: 13px;
+  }
+}
+
 
 /* About Section */
 .about-section {
@@ -500,49 +652,57 @@
 
 /* Stats Section */
 .stats-section {
-  background: linear-gradient(135deg, #0db04b 0%, #0a9a3f 100%);
-  color: white;
+  background: #ffffff;
+  color: #0f1419;
 }
 
+/* Section title */
 .stats-section .section-title {
-  color: white;
+  color: #0f1419;
 }
 
 .stats-section .section-title::after {
-  background: white;
+  background: #0db04b;
 }
 
+/* Stat Card */
 .stat-card {
   padding: 30px 20px;
-  background: rgba(255, 255, 255, 0.1);
+  background: #f8f9fa;
   border-radius: 15px;
-  backdrop-filter: blur(10px);
-  transition: all 0.3s ease;
+  border: 1px solid #e6e6e6;
+
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .stat-card:hover {
-  transform: translateY(-10px);
-  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-8px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
 }
 
+/* Icon */
 .stat-icon {
-  font-size: 48px;
+  font-size: 46px;
   margin-bottom: 15px;
-  color: white;
+  color: #0db04b;
 }
 
+/* Value */
 .stat-value {
-  font-size: 42px;
+  font-size: 40px;
   font-weight: 800;
-  color: white;
-  margin-bottom: 10px;
+  color: #0f1419;
+  margin-bottom: 8px;
 }
 
+/* Label */
 .stat-label {
-  font-size: 18px;
-  color: rgba(255, 255, 255, 0.9);
+  font-size: 17px;
+  color: #555;
   margin: 0;
 }
+
+
 
 /* Top Sales Section */
 .top-sales-section {
@@ -565,28 +725,50 @@
 /* Testimonials Section */
 .testimonials-section {
   background: white;
+  padding-top: 3rem !important;
+  padding-bottom: 3rem !important;
 }
 
-.testimonial-card {
+.testimonials-carousel {
+  position: relative;
+}
+
+#testimonials-section .carousel-inner {
+  padding: 0;
+  height: 350px
+}
+
+.testimonials-row {
+  margin: 0 !important;
+}
+
+.testimonials-col {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  margin-bottom: 0 !important;
+}
+
+.testimonials-card {
   background: #f8f9fa;
   padding: 30px;
   border-radius: 15px;
   height: 100%;
   transition: all 0.3s ease;
+  margin-bottom: 0;
 }
 
-.testimonial-card:hover {
+.testimonials-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 10px 25px rgba(0,0,0,0.1);
 }
 
-.testimonial-rating {
+.testimonials-rating {
   color: #ffc107;
   font-size: 20px;
   margin-bottom: 15px;
 }
 
-.testimonial-content {
+.testimonials-content {
   font-size: 16px;
   line-height: 1.8;
   color: #555;
@@ -594,33 +776,34 @@
   font-style: italic;
 }
 
-.testimonial-author {
+.testimonials-author {
   display: flex;
   align-items: center;
   gap: 15px;
+  margin-bottom: 0;
 }
 
-.testimonial-image {
+.testimonials-image {
   width: 60px;
   height: 60px;
   border-radius: 50%;
   object-fit: cover;
 }
 
-.testimonial-name {
+.testimonials-name {
   font-size: 18px;
   font-weight: 700;
   color: #0f1419;
   margin: 0;
 }
 
-.testimonial-role {
+.testimonials-role {
   font-size: 14px;
   color: #666;
   margin: 0;
 }
 
-.testimonial-control {
+.testimonials-control {
   width: 50px;
   height: 50px;
   background: #0db04b;
@@ -629,22 +812,73 @@
   transform: translateY(-50%);
   opacity: 0.8;
   transition: all 0.3s ease;
+  margin-top: 0;
 }
 
-.testimonial-control:hover {
+.testimonials-control:hover {
   opacity: 1;
   background: #0a9a3f;
 }
 
-.testimonial-control .carousel-control-prev-icon,
-.testimonial-control .carousel-control-next-icon {
+.testimonials-control .carousel-control-prev-icon,
+.testimonials-control .carousel-control-next-icon {
   width: 20px;
   height: 20px;
+}
+
+.testimonials-control-prev {
+  left: -25px;
+}
+
+.testimonials-control-next {
+  right: -25px;
+}
+
+/* Mobile View - Show only 1 testimonial */
+@media (max-width: 767.98px) {
+  .testimonials-section {
+    padding-top: 2rem !important;
+    padding-bottom: 2rem !important;
+  }
+
+  .testimonials-col:not(:first-child) {
+    display: none;
+  }
+  
+  .testimonials-row {
+    justify-content: center;
+  }
+  
+  .testimonials-card {
+    padding: 20px;
+  }
+  
+  .testimonials-content {
+    font-size: 15px;
+  }
+  
+  .testimonials-control {
+    width: 40px;
+    height: 40px;
+  }
+
+  .testimonials-control-prev {
+    left: -5px;
+  }
+
+  .testimonials-control-next {
+    right: -5px;
+  }
 }
 
 /* Team Section */
 .team-section {
   background: #f8f9fa;
+  padding: 60px 0;
+}
+
+.carousel-inner {
+  padding-bottom: 50px;
 }
 
 .team-card {
@@ -653,18 +887,23 @@
   overflow: hidden;
   box-shadow: 0 4px 15px rgba(0,0,0,0.08);
   transition: all 0.3s ease;
-  height: 100%;
+  height: 90%;
+  margin-bottom: 40px;
+  display: flex;
+  flex-direction: column;
 }
 
 .team-card:hover {
   transform: translateY(-10px);
   box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+  z-index: 10;
 }
 
 .team-image-wrapper {
   position: relative;
   overflow: hidden;
   height: 300px;
+  flex-shrink: 0;
 }
 
 .team-image {
@@ -724,6 +963,9 @@
 .team-body {
   padding: 25px;
   text-align: center;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .team-name {
@@ -751,12 +993,28 @@
   color: #0db04b;
   text-decoration: none;
   font-size: 14px;
-  display: inline-flex;
+  display: flex;
   align-items: center;
+  justify-content: center;
   transition: color 0.3s ease;
+  margin-bottom: 8px;
 }
 
 .team-email:hover {
+  color: #0a9a3f;
+}
+
+.team-phone {
+  color: #0db04b;
+  text-decoration: none;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.3s ease;
+}
+
+.team-phone:hover {
   color: #0a9a3f;
 }
 
@@ -780,6 +1038,156 @@
 .team-control .carousel-control-next-icon {
   width: 20px;
   height: 20px;
+}
+
+/* Tablet Styles (768px - 991px) */
+@media (max-width: 991px) {
+  .team-section {
+    padding: 40px 0;
+  }
+
+  .team-image-wrapper {
+    height: 250px;
+  }
+
+  .team-name {
+    font-size: 20px;
+  }
+
+  .team-position {
+    font-size: 15px;
+  }
+
+  .team-body {
+    padding: 20px;
+  }
+}
+
+/* Mobile Styles (576px - 767px) */
+@media (max-width: 767px) {
+  .team-section {
+    padding: 30px 0;
+  }
+
+  .team-card {
+    margin-bottom: 20px;
+    height:100%
+  }
+
+  .team-image-wrapper {
+    height: 280px;
+  }
+
+  .team-name {
+    font-size: 20px;
+  }
+
+  .team-position {
+    font-size: 14px;
+  }
+
+  .team-bio {
+    font-size: 13px;
+  }
+
+  .team-email {
+    font-size: 13px;
+  }
+
+  .social-link {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+  }
+
+  .team-social {
+    gap: 12px;
+  }
+
+  .team-control {
+    width: 40px;
+    height: 40px;
+  }
+
+  .team-control .carousel-control-prev-icon,
+  .team-control .carousel-control-next-icon {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+/* Small Mobile Styles (max 575px) */
+@media (max-width: 575px) {
+  .team-section {
+    padding: 20px 0;
+  }
+
+  .team-card {
+    margin-bottom: 15px;
+    border-radius: 12px;
+  }
+
+  .team-image-wrapper {
+    height: 250px;
+  }
+
+  .team-body {
+    padding: 18px;
+  }
+
+  .team-name {
+    font-size: 18px;
+    margin-bottom: 6px;
+  }
+
+  .team-position {
+    font-size: 13px;
+    margin-bottom: 12px;
+  }
+
+  .team-bio {
+    font-size: 12px;
+    margin-bottom: 12px;
+  }
+
+  .team-email {
+    font-size: 12px;
+  }
+
+  .social-link {
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+  }
+
+  .team-social {
+    gap: 10px;
+  }
+
+  .team-control {
+    width: 35px;
+    height: 35px;
+  }
+
+  .team-control .carousel-control-prev-icon,
+  .team-control .carousel-control-next-icon {
+    width: 14px;
+    height: 14px;
+  }
+
+  /* Disable hover effects on mobile */
+  .team-card:hover {
+    transform: none;
+  }
+
+  /* Make overlay visible on tap instead of hover */
+  .team-overlay {
+    opacity: 0;
+  }
+
+  .team-card:active .team-overlay {
+    opacity: 1;
+  }
 }
 
 /* Blogs Section */
@@ -1419,11 +1827,11 @@
 
 @media (max-width: 768px) {
   .chatbot-window {
-    width: calc(100% - 40px);
-    height: calc(100vh - 120px);
-    bottom: 90px;
-    right: 20px;
-    left: 20px;
+    width: calc(100% - 80px);
+    height: calc(100vh - 300px);
+    bottom: 70px;
+    right: 10px;
+    left: 60px;
   }
   
   .chatbot-button {

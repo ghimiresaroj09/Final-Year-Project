@@ -156,26 +156,93 @@
 
 <style>
 @media (max-width: 767.98px) {
-    /* Full-width search bar */
-    .form-control.me-2 {
-        width: 100%; /* Full width on mobile */
-        margin-bottom: 0.5rem; /* Add spacing below search bar */
+    /* Search form container - flex layout for same line */
+    .d-flex[method="GET"] {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: stretch !important;
+        width: 100%;
+        margin-bottom: 0.75rem;
+        gap: 0.5rem;
     }
 
-    /* Set buttons to 50px width */
-    .d-flex .btn, 
-    .navbar-nav .nav-link.btn, .cart-btn {
-        width: 100px; /* Set width to 50px */
-        margin: 0; /* Remove margin */
-        padding: 0.5rem 0.5rem; /* Adjust padding */
-        margin-top: 5px;
+    /* Search input - same height as button */
+    .d-flex[method="GET"] .form-control {
+        flex: 1;
+        height: 42px;
+        margin: 0;
     }
 
-    /* Ensure buttons are centered */
+    /* Search button - same height as input */
+    .d-flex[method="GET"] .bg-search {
+        height: 42px;
+        width: 50px;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Container for Cart, Login, Register buttons */
+    .navbar-nav.ms-auto {
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: space-between;
+        align-items: stretch !important;
+        width: 100%;
+        gap: 0.5rem;
+        margin: 0;
+    }
+
+    /* Cart button - equal width and height with text visible */
+    .cart-btn {
+        flex: 1;
+        height: 42px;
+        margin: 0;
+        padding: 0 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        white-space: nowrap;
+        font-size: 14px;
+    }
+
+    /* Show Cart text on mobile */
+    .cart-btn .d-none.d-lg-inline {
+        display: inline !important;
+    }
+
+    /* Login and Register buttons - equal width and height */
+    .navbar-nav.ms-auto .nav-item {
+        flex: 1;
+        margin: 10;
+    }
+
+    .navbar-nav.ms-auto .nav-link.btn {
+        width: 100%;
+        height: 42px;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+    }
+
+    /* User dropdown (when logged in) - same height */
+    .navbar-nav.ms-auto .nav-link.dropdown-toggle {
+        height: 42px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 1rem;
+    }
+
+    /* Ensure navbar collapse doesn't interfere */
     .navbar-collapse {
-        flex-direction: row;
-        justify-content: space-between; /* Spread out elements */
-        align-items: center; /* Center items vertically */
+        display: flex;
+        flex-direction: column;
     }
 }
 

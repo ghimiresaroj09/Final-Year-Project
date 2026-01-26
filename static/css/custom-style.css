@@ -179,6 +179,10 @@ body {
   border-radius: 25px;
   padding: 10px 25px;
   transition: var(--transition);
+  height: 50px; 
+  width: 100px;
+  display: flex;
+  justify-content: center;
 }
 
 .btn-success:hover {

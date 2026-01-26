@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from .models import BlogPost, Category, BlogComment
 from .forms import BlogCommentForm
+from django.contrib import messages
 
 def blog_list(request):
     """Display all published blog posts with filtering and pagination"""
@@ -83,7 +84,9 @@ def blog_detail(request, slug):
             comment = form.save(commit=False)
             comment.post = post
             comment.save()
+            messages.success(request, "Thank you for your comment. It will be displayed once admin verify it.")
             return redirect('blog:blog_detail', slug=post.slug)
+        
     else:
         form = BlogCommentForm() if request.user.is_authenticated else None
     
