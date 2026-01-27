@@ -10,18 +10,36 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 
 
-# Create your views here.
 def product_catalog(request):
-    categories= Category.objects.all().order_by('name')
-    # Paginate categories with 4 categories per page
+    # Only categories that actually have products
+    categories = (
+        Category.objects
+        .filter(product__isnull=False)
+        .distinct()
+        .order_by('name')
+    )
+
+    # Paginate categories: 3 per page
     paginator = Paginator(categories, 3)
-    page_number = request.GET.get('page')  # Get the page number from the query parameter 'page'
+    page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    catwise={}
+
+    # Build category → products mapping
+    catwise = {}
     for category in page_obj:
-        product=Product.objects.filter(category=category).order_by('out_of_stock')
-        catwise[category]= product
-    return render(request,'product.html',{'catwise':catwise,'page_obj':page_obj})
+        products = (
+            Product.objects
+            .filter(category=category)
+            .order_by('out_of_stock')[:4]  # limit to 4 products
+        )
+        catwise[category] = products
+
+    context = {
+        'catwise': catwise,
+        'page_obj': page_obj,
+    }
+
+    return render(request, 'product.html', context)
 
 
 def product(request, pk):

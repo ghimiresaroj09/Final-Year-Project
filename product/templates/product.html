@@ -14,88 +14,90 @@
 <section class="py-5">
   <div class="container px-4 px-lg-5">
     {% for category, products in catwise.items %}
-      <div class="category-section">
-        <div class="category-header">
-          <div class="category-title-container">
-            <i class="bi bi-leaf category-icon"></i>
-            <h2>{{ category.name }}</h2>
+      {% if products %}
+        <div class="category-section">
+          <div class="category-header">
+            <div class="category-title-container">
+              <i class="bi bi-leaf category-icon"></i>
+              <h2>{{ category.name }}</h2>
+            </div>
+            <a href="{% url 'category' category.name %}" class="view-all-btn">
+              View All <i class="bi bi-arrow-right ms-2"></i>
+            </a>
           </div>
-          <a href="{% url 'category' category.name %}" class="view-all-btn">
-            View All <i class="bi bi-arrow-right ms-2"></i>
-          </a>
-        </div>
-        
-        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4">
-          {% for product in products %}
-            <div class="col mb-5">
-              <div class="product-card">
-                <div class="product-image-wrapper">
-                  <div class="image-container">
-                    <a href="{% url 'product' product.id %}">
-                      <img class="product-image" src="{{ product.image.url }}" alt="{{ product.name }}">
-                    </a>
-                  </div>
-                  {% if not product.out_of_stock %}
-                    {% if product.is_sale %}
-                      <div class="product-badge sale-badge">
-                        <i class="bi bi-tag-fill me-1"></i>Sale
-                      </div>
-                    {% endif %}
-                  {% else %}
-                    <div class="product-badge out-of-stock-badge">
-                      Out of Stock
+          
+          <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4">
+            {% for product in products %}
+              <div class="col mb-5">
+                <div class="product-card">
+                  <div class="product-image-wrapper">
+                    <div class="image-container">
+                      <a href="{% url 'product' product.id %}">
+                        <img class="product-image" src="{{ product.image.url }}" alt="{{ product.name }}">
+                      </a>
                     </div>
-                  {% endif %}
-                </div>
-                
-                <div class="card-body p-4">
-                  <div class="text-center">
-                    <a href="{% url 'product' product.id %}" class="product-link">
-                      <h5 class="product-name fw-bolder">{{ product.name }}</h5>
-                    </a>
-                    
                     {% if not product.out_of_stock %}
                       {% if product.is_sale %}
-                        <div class="product-price">
-                          <span class="original-price"><strike>Rs.{{ product.price }}</strike></span>
-                          <span class="sale-price">Rs.{{ product.sale_price }}</span>
-                        </div>
-                      {% else %}
-                        <div class="product-price">
-                          <span class="current-price">Rs.{{ product.price }}</span>
+                        <div class="product-badge sale-badge">
+                          <i class="bi bi-tag-fill me-1"></i>Sale
                         </div>
                       {% endif %}
+                    {% else %}
+                      <div class="product-badge out-of-stock-badge">
+                        Out of Stock
+                      </div>
                     {% endif %}
                   </div>
-                </div>
-                
-                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                  <div class="text-center">
-                    {% if not product.out_of_stock %}
-                      <div class="quantity-control mb-3">
-                        <button type="button" class="btn-qty decrement-btn" id="decrement{{ product.id }}" aria-label="Decrease quantity">
-                          <i class="bi bi-dash-lg"></i>
+                  
+                  <div class="card-body p-4">
+                    <div class="text-center">
+                      <a href="{% url 'product' product.id %}" class="product-link">
+                        <h5 class="product-name fw-bolder">{{ product.name }}</h5>
+                      </a>
+                      
+                      {% if not product.out_of_stock %}
+                        {% if product.is_sale %}
+                          <div class="product-price">
+                            <span class="original-price"><strike>Rs.{{ product.price }}</strike></span>
+                            <span class="sale-price">Rs.{{ product.sale_price }}</span>
+                          </div>
+                        {% else %}
+                          <div class="product-price">
+                            <span class="current-price">Rs.{{ product.price }}</span>
+                          </div>
+                        {% endif %}
+                      {% endif %}
+                    </div>
+                  </div>
+                  
+                  <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                    <div class="text-center">
+                      {% if not product.out_of_stock %}
+                        <div class="quantity-control mb-3">
+                          <button type="button" class="btn-qty decrement-btn" id="decrement{{ product.id }}" aria-label="Decrease quantity">
+                            <i class="bi bi-dash-lg"></i>
+                          </button>
+                          <input type="text" class="qty-input text-center" id="qty{{ product.id }}" value="1" readonly>
+                          <button type="button" class="btn-qty increment-btn" id="increment{{ product.id }}" aria-label="Increase quantity">
+                            <i class="bi bi-plus-lg"></i>
+                          </button>
+                        </div>
+                        <button type="button" data-index="{{ product.id }}" class="btn btn-outline-dark add-to-cart w-100">
+                          <i class="bi bi-cart-plus me-2"></i>Add to Cart
                         </button>
-                        <input type="text" class="qty-input text-center" id="qty{{ product.id }}" value="1" readonly>
-                        <button type="button" class="btn-qty increment-btn" id="increment{{ product.id }}" aria-label="Increase quantity">
-                          <i class="bi bi-plus-lg"></i>
+                      {% else %}
+                        <button type="button" class="btn btn-outline-dark w-100" disabled>
+                          <i class="bi bi-exclamation-circle me-2"></i>Out of Stock
                         </button>
-                      </div>
-                      <button type="button" data-index="{{ product.id }}" class="btn btn-outline-dark add-to-cart w-100">
-                        <i class="bi bi-cart-plus me-2"></i>Add to Cart
-                      </button>
-                    {% else %}
-                      <button type="button" class="btn btn-outline-dark w-100" disabled>
-                        <i class="bi bi-exclamation-circle me-2"></i>Out of Stock
-                      </button>
-                    {% endif %}
+                      {% endif %}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          {% endfor %}
+            {% endfor %}
+          </div>
         </div>
-      </div>
+      {% endif %}
     {% endfor %}
   </div>
 
