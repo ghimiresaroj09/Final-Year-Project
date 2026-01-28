@@ -175,6 +175,22 @@ def chatbot(request):
             stats_keywords = ['stat', 'statistic', 'number', 'count', 'total', 'how many', 'customers', 'experience']
             
             message_lower = message.lower()
+
+            # KnowledgeBase lookup: return KB content when title or any keyword matches
+            try:
+                kb_entries = KnowledgeBase.objects.filter(is_active=True)
+                for kb in kb_entries:
+                    if kb.title and kb.title.lower() in message_lower:
+                        response = kb.content
+                        return JsonResponse({'response': response})
+                    if kb.keywords:
+                        for kw in [k.strip().lower() for k in kb.keywords.split(',') if k.strip()]:
+                            if kw in message_lower:
+                                response = kb.content
+                                return JsonResponse({'response': response})
+            except Exception:
+                # If KB lookup fails for any reason, continue to other handlers
+                pass
             
             # Product queries
             if any(keyword in message_lower for keyword in product_keywords):

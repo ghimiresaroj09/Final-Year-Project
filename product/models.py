@@ -167,3 +167,26 @@ class Support(models.Model):
     
     def __str__(self):
         return self.title
+
+
+class KnowledgeBase(models.Model):
+    """Simple knowledge base entries to be surfaced by the chatbot.
+
+    - `title`: short human readable title
+    - `content`: the HTML/text content to return to the user
+    - `keywords`: comma-separated keywords to match against the user message
+    - `is_active`: toggle visibility
+    """
+    title = models.CharField(max_length=200)
+    content = models.TextField(help_text='The content that the chatbot will return (can include simple HTML).')
+    keywords = models.CharField(max_length=300, blank=True, help_text='Comma-separated keywords to match user messages')
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name_plural = 'Knowledge Base'
+
+    def __str__(self):
+        return self.title
