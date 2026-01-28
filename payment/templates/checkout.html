@@ -2,41 +2,212 @@
 
 {% block content %}
 <style>
-.order-form-container {
-    width: 100%;
-    max-width: 500px;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    background-color: #f9f9f9;
+/* Checkout Page */
+.checkout-container {
+  min-height: 70vh;
+  padding: 60px 20px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #f0f1f3 100%);
 }
 
-</style>
-<div class="container my-5 d-flex justify-content-center">
-    <div class="order-form-container">
-        <h2 class="text-center mb-4">Checkout</h2>
+.checkout-card {
+  max-width: 600px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  padding: 40px;
+  border: 1px solid rgba(13, 176, 75, 0.1);
+}
 
-        <form method="post" class="order-form">
-            {% csrf_token %}
-            
-            <div class="form-group">
-                <label for="full_name">Full Name</label>
-                <input type="text" name="full_name" id="full_name" value="{{ user.get_full_name }}" required class="form-control" readonly>
-            </div>
-            
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" name="email" id="email" value="{{ user.email }}" required class="form-control" readonly>
-            </div>
-            
-            <div class="form-group">
-                <label for="shipping_address">Shipping Address</label>
-                <textarea name="shipping_address" id="shipping_address" required class="form-control">{{ user.profile.address }}</textarea>
-            </div>
-            
-            <button type="submit" class="btn btn-primary btn-block mt-4">Place Order</button>
-        </form>
+.checkout-header {
+  text-align: center;
+  margin-bottom: 35px;
+}
+
+.checkout-header h2 {
+  font-size: 32px;
+  font-weight: 800;
+  color: #0f1419;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  letter-spacing: -0.5px;
+}
+
+.checkout-header h2 i {
+  color: #0db04b;
+  font-size: 36px;
+}
+
+.checkout-header p {
+  color: #666;
+  font-size: 14px;
+  margin: 0;
+}
+
+.form-group {
+  margin-bottom: 25px;
+}
+
+.form-label {
+  display: block;
+  font-weight: 600;
+  color: #0f1419;
+  margin-bottom: 10px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.form-label i {
+  color: #0db04b;
+  font-size: 16px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 13px 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 15px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background-color: #f8f9fa;
+  font-family: inherit;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #0db04b;
+  background-color: white;
+  box-shadow: 0 0 0 3px rgba(13, 176, 75, 0.15);
+}
+
+.form-control:disabled,
+.form-control[readonly] {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+}
+
+textarea.form-control {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.checkout-summary {
+  background: linear-gradient(135deg, rgba(13, 176, 75, 0.05) 0%, rgba(13, 176, 75, 0.02) 100%);
+  border: 2px solid #f0f0f0;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 30px;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  color: #666;
+}
+
+.summary-row.total {
+  padding-top: 15px;
+  border-top: 2px solid #ddd;
+  font-size: 18px;
+  font-weight: 700;
+  color: #0db04b;
+}
+
+.btn-checkout {
+  width: 100%;
+  padding: 14px 20px;
+  background: linear-gradient(135deg, #0db04b 0%, #0a9a3f 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 15px rgba(13, 176, 75, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.btn-checkout:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(13, 176, 75, 0.4);
+}
+
+.btn-checkout:active {
+  transform: translateY(0);
+}
+
+.checkout-footer {
+  text-align: center;
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}
+
+.checkout-footer p {
+  color: #999;
+  font-size: 13px;
+  margin: 0;
+}
+
+@media (max-width: 576px) {
+  .checkout-card {
+    padding: 30px 20px;
+  }
+
+  .checkout-header h2 {
+    font-size: 24px;
+  }
+}
+</style>
+
+<div class="checkout-container">
+  <div class="checkout-card">
+    <div class="checkout-header">
+      <h2><i class="bi bi-credit-card-fill"></i>Checkout</h2>
+      <p>Complete your order securely</p>
     </div>
+
+    <form method="post" class="order-form">
+      {% csrf_token %}
+      
+      <div class="form-group">
+        <label for="full_name" class="form-label"><i class="bi bi-person-fill"></i>Full Name</label>
+        <input type="text" name="full_name" id="full_name" value="{{ user.get_full_name }}" required class="form-control" readonly>
+      </div>
+      
+      <div class="form-group">
+        <label for="email" class="form-label"><i class="bi bi-envelope-fill"></i>Email Address</label>
+        <input type="email" name="email" id="email" value="{{ user.email }}" required class="form-control" readonly>
+      </div>
+      
+      <div class="form-group">
+        <label for="phone" class="form-label"><i class="bi bi-telephone-fill"></i>Phone Number</label>
+        <input type="tel" name="phone" id="phone" value="{{ user.profile.phone }}" required class="form-control" placeholder="Enter your phone number">
+      </div>
+      
+      <div class="form-group">
+        <label for="shipping_address" class="form-label"><i class="bi bi-geo-alt-fill"></i>Shipping Address</label>
+        <textarea name="shipping_address" id="shipping_address" required class="form-control">{{ user.profile.address }}</textarea>
+      </div>
+      
+      <button type="submit" class="btn-checkout"><i class="bi bi-lock-fill"></i>Place Order</button>
+    </form>
+
+    <div class="checkout-footer">
+      <p>Your payment information is secure and encrypted</p>
+    </div>
+  </div>
 </div>
 
 {% endblock %}

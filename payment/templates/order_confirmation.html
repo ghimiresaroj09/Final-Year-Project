@@ -2,42 +2,415 @@
 
 {% block content %}
 
+<style>
+/* Order Confirmation Page */
+.confirmation-container {
+  min-height: 80vh;
+  padding: 60px 20px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #f0f1f3 100%);
+}
 
-<div class="container">
-    <h2 class="text-center">Order Report</h2>
-    
-    <div class="order-details">
-        <p><strong>Order ID:</strong> {{ order.id }}</p>
-        <p><strong>Customer Name:</strong> {{ order.full_name }}</p>
-        <p><strong>Email:</strong> {{ order.email }}</p>
-        <p><strong>Shipping Address:</strong> {{ order.shipping_address }}</p>
-        <p><strong>Date Ordered:</strong> {{ order.date_ordered}}</p>
-        <p><strong>Total Amount:</strong> Rs.{{ order.total_amount }}</p>
-        <p><strong>Shipping Status:</strong> {{ order.shipping_status|yesno:"Shipped,Not Shipped" }}</p>
-        <p><strong>Date Shipped:</strong> {{ order.date_shipped|default:"Not Shipped Yet" }}</p>
+.confirmation-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.confirmation-header h2 {
+  font-size: 32px;
+  font-weight: 800;
+  color: #0f1419;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  letter-spacing: -0.5px;
+}
+
+.confirmation-header h2 i {
+  color: #0db04b;
+  font-size: 36px;
+}
+
+.confirmation-header p {
+  color: #666;
+  font-size: 15px;
+  margin: 0;
+}
+
+.confirmation-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+.confirmation-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  border: 1px solid rgba(13, 176, 75, 0.1);
+}
+
+.card-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #0f1419;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #f0f0f0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.card-title i {
+  color: #0db04b;
+  font-size: 20px;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
+  color: #666;
+  font-size: 14px;
+}
+
+.detail-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.detail-label {
+  font-weight: 600;
+  color: #0f1419;
+}
+
+.detail-value {
+  text-align: right;
+  color: #666;
+}
+
+.detail-value.highlight {
+  color: #0db04b;
+  font-weight: 600;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: 5px;
+}
+
+.status-shipped {
+  background: linear-gradient(135deg, rgba(13, 176, 75, 0.15) 0%, rgba(13, 176, 75, 0.08) 100%);
+  color: #0db04b;
+  border: 1px solid rgba(13, 176, 75, 0.2);
+}
+
+.status-pending {
+  background: linear-gradient(135deg, rgba(255, 193, 7, 0.2) 0%, rgba(255, 193, 7, 0.1) 100%);
+  color: #856404;
+  border: 1px solid rgba(255, 193, 7, 0.3);
+}
+
+.items-section {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  border: 1px solid rgba(13, 176, 75, 0.1);
+  margin-bottom: 30px;
+}
+
+.items-section h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0f1419;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #f0f0f0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.items-section h3 i {
+  color: #0db04b;
+  font-size: 22px;
+}
+
+.items-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.items-table thead {
+  background: #f8f9fa;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.items-table th {
+  padding: 15px;
+  text-align: left;
+  font-weight: 700;
+  color: #0f1419;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.items-table td {
+  padding: 15px;
+  border-bottom: 1px solid #e0e0e0;
+  color: #666;
+}
+
+.items-table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+.items-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.items-table .text-right {
+  text-align: right;
+}
+
+.items-table .amount {
+  color: #0db04b;
+  font-weight: 600;
+}
+
+.summary-box {
+  margin-top: 25px;
+  padding: 20px;
+  background: linear-gradient(135deg, rgba(13, 176, 75, 0.05) 0%, rgba(13, 176, 75, 0.02) 100%);
+  border-radius: 10px;
+  border: 2px solid #f0f0f0;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  color: #666;
+  font-size: 15px;
+}
+
+.summary-row.total {
+  padding: 15px 0;
+  border-top: 2px solid #ddd;
+  font-size: 18px;
+  font-weight: 700;
+  color: #0db04b;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 15px;
+  margin-top: 30px;
+  flex-wrap: wrap;
+}
+
+.btn-action {
+  flex: 1;
+  min-width: 200px;
+  padding: 14px 20px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 15px;
+}
+
+.btn-action.primary {
+  background: linear-gradient(135deg, #0db04b 0%, #0a9a3f 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(13, 176, 75, 0.3);
+  border: none;
+  cursor: pointer;
+}
+
+.btn-action.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(13, 176, 75, 0.4);
+  text-decoration: none;
+  color: white;
+}
+
+.btn-action.secondary {
+  background: white;
+  color: #0db04b;
+  border: 2px solid #0db04b;
+}
+
+.btn-action.secondary:hover {
+  background: #f8f9fa;
+  text-decoration: none;
+}
+
+@media (max-width: 768px) {
+  .confirmation-container {
+    padding: 40px 15px;
+  }
+
+  .confirmation-header h2 {
+    font-size: 24px;
+  }
+
+  .confirmation-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+  }
+
+  .btn-action {
+    min-width: 100%;
+  }
+
+  .detail-row {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .detail-value {
+    text-align: left;
+  }
+
+  .items-table th,
+  .items-table td {
+    padding: 10px;
+    font-size: 13px;
+  }
+}
+</style>
+
+<div class="confirmation-container">
+  <div class="confirmation-header">
+    <h2><i class="bi bi-check-circle-fill"></i>Order Details</h2>
+    <p>Complete information about your order</p>
+  </div>
+
+  <div class="confirmation-grid">
+    <!-- Order Information -->
+    <div class="confirmation-card">
+      <div class="card-title">
+        <i class="bi bi-info-circle-fill"></i>Order Information
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Order ID</span>
+        <span class="detail-value highlight">#{{ order.id }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Date Ordered</span>
+        <span class="detail-value">{{ order.date_ordered|date:"d M, Y" }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Status</span>
+        <div>
+          {% if order.shipping_status %}
+          <span class="status-badge status-shipped">
+            <i class="bi bi-check-circle-fill"></i>Shipped
+          </span>
+          {% else %}
+          <span class="status-badge status-pending">
+            <i class="bi bi-clock-history"></i>Processing
+          </span>
+          {% endif %}
+        </div>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Date Shipped</span>
+        <span class="detail-value">{{ order.date_shipped|default:"Not Shipped Yet" }}</span>
+      </div>
     </div>
-    
-    <h3 class="text-center">Order Items</h3>
-    <table class="table table-striped table-bordered text-center">
-        <thead>
-            <tr>
-                <th>Product</th>
-                <th>Quantity</th>
-                <th>Unit Price</th>
-                <th>Subtotal</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for item in order_items %}
-            <tr>
-                <td>{{ item.product.name }}</td>
-                <td>{{ item.quantity }}</td>
-                <td>Rs.{{ item.unit_price }}</td>
-                <td>Rs.{{ item.subtotal }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
+
+    <!-- Customer Information -->
+    <div class="confirmation-card">
+      <div class="card-title">
+        <i class="bi bi-person-circle"></i>Customer Information
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Full Name</span>
+        <span class="detail-value">{{ order.full_name }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Email</span>
+        <span class="detail-value">{{ order.email }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Phone Number</span>
+        <span class="detail-value">{{ order.phone }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Shipping Address</span>
+        <span class="detail-value">{{ order.shipping_address }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Total Amount</span>
+        <span class="detail-value highlight">Rs. {{ order.total_amount|floatformat:0 }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Order Items -->
+  <div class="items-section">
+    <h3><i class="bi bi-bag-fill"></i>Order Items</h3>
+    <table class="items-table">
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th class="text-right">Quantity</th>
+          <th class="text-right">Unit Price</th>
+          <th class="text-right">Subtotal</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in order_items %}
+        <tr>
+          <td><strong>{{ item.product.name }}</strong></td>
+          <td class="text-right">{{ item.quantity }}</td>
+          <td class="text-right">Rs. {{ item.unit_price|floatformat:0 }}</td>
+          <td class="text-right amount">Rs. {{ item.subtotal|floatformat:0 }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
     </table>
-    <p ><strong>Total Amount:</strong> Rs.{{ order.total_amount }}</p>       
+    <div class="summary-box">
+      <div class="summary-row total">
+        <span>Total Amount</span>
+        <span>Rs. {{ order.total_amount|floatformat:0 }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="action-buttons">
+    <a href="{% url 'order_history' %}" class="btn-action secondary">
+      <i class="bi bi-arrow-left"></i>Back to Orders
+    </a>
+    <a href="{% url 'home' %}" class="btn-action primary">
+      <i class="bi bi-shop"></i>Continue Shopping
+    </a>
+  </div>
 </div>
+
 {% endblock %}

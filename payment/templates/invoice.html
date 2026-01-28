@@ -2,83 +2,270 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Bill no. {{ order.id }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice #{{ order.id }} - Hamro Agro Farm</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            width: 80mm; /* Set width for bill-like appearance */
-            margin: auto;
-        }
-        h2, p {
-            text-align: center;
+        * {
             margin: 0;
-            padding: 4px;
+            padding: 0;
+            box-sizing: border-box;
         }
-        table {
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8f9fa;
+            padding: 20px;
+        }
+
+        .invoice-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .invoice-header {
+            background: linear-gradient(135deg, #0db04b 0%, #0a9a3f 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .invoice-header h1 {
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .invoice-header p {
+            font-size: 14px;
+            opacity: 0.95;
+        }
+
+        .invoice-content {
+            padding: 40px;
+        }
+
+        .invoice-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .invoice-section h3 {
+            font-size: 12px;
+            font-weight: 700;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+        }
+
+        .invoice-section p {
+            color: #0f1419;
+            font-size: 15px;
+            line-height: 1.8;
+            margin-bottom: 8px;
+        }
+
+        .invoice-section strong {
+            color: #0db04b;
+        }
+
+        .invoice-divider {
+            height: 1px;
+            background: #e0e0e0;
+            margin: 40px 0;
+        }
+
+        .items-table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
         }
-        th, td {
-            border-bottom: 1px solid #000;
-            padding: 8px;
+
+        .items-table thead {
+            background: #f8f9fa;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .items-table th {
+            padding: 15px;
             text-align: left;
+            font-weight: 700;
+            color: #0f1419;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
-        .no-border {
-            border: none;
+
+        .items-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+            color: #666;
         }
-        .total {
-            font-weight: bold;
+
+        .items-table tbody tr:last-child td {
+            border-bottom: none;
         }
-        .footer {
+
+        .items-table .text-right {
+            text-align: right;
+        }
+
+        .summary-box {
+            margin-top: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, rgba(13, 176, 75, 0.05) 0%, rgba(13, 176, 75, 0.02) 100%);
+            border-radius: 10px;
+            border: 2px solid #f0f0f0;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            color: #666;
+            font-size: 15px;
+        }
+
+        .summary-row.total {
+            padding: 15px 0;
+            border-top: 2px solid #ddd;
+            font-size: 18px;
+            font-weight: 700;
+            color: #0db04b;
+        }
+
+        .invoice-footer {
+            background: #f8f9fa;
+            padding: 30px 40px;
             text-align: center;
-            font-size: 12px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .invoice-footer p {
+            color: #666;
+            font-size: 14px;
+            margin: 8px 0;
+        }
+
+        .invoice-footer .thank-you {
+            font-size: 16px;
+            font-weight: 600;
+            color: #0db04b;
+            margin-top: 15px;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .invoice-container {
+                box-shadow: none;
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .invoice-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .invoice-header {
+                padding: 25px;
+            }
+
+            .invoice-header h1 {
+                font-size: 24px;
+            }
+
+            .invoice-content {
+                padding: 25px;
+            }
         }
     </style>
 </head>
 <body>
-    <h2>Hamro Agro Farm</h2>
-    <p>Mulpani, Kathmandu</p>
-    <p><strong>Bill No:</strong> {{ order.id }}</p>
-    <p><strong>Customer Name:</strong> {{ order.full_name }}</p>
-    <p><strong>Date:</strong> {{ order.date_ordered }}</p>
-    
-    <h3>Items Ordered</h3>
-    <table>
-        <thead>
-            <tr>
-                <th>Item</th>
-                <th>Qty</th>
-                <th>Unit Price</th>
-                <th>Subtotal</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for item in order_items %}
-            <tr>
-                <td>{{ item.product.name }}</td>
-                <td>{{ item.quantity }}</td>
-                <td>Rs.{{ item.unit_price }}</td>
-                <td>Rs.{{ item.subtotal }}</td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="4">No items ordered</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="invoice-container">
+        <!-- Header -->
+        <div class="invoice-header">
+            <h1><i style="font-size: 28px;" class="bi bi-receipt"></i>INVOICE</h1>
+            <p>Thank you for your order!</p>
+        </div>
 
-    <table class="no-border">
-        <tr>
-            <td class="no-border" colspan="3" style="text-align:right;">Total:</td>
-            <td class="total">Rs.{{ order.total_amount }}</td>
-        </tr>
-    </table>
+        <!-- Content -->
+        <div class="invoice-content">
+            <!-- Company & Order Info -->
+            <div class="invoice-grid">
+                <div class="invoice-section">
+                    <h3>From</h3>
+                    <p><strong>Hamro Agro Farm</strong></p>
+                    <p>Mulpani, Kathmandu</p>
+                    <p style="color: #999; margin-top: 15px;">Premium Organic Products</p>
+                </div>
+                <div class="invoice-section" style="text-align: right;">
+                    <h3>Invoice Details</h3>
+                    <p><strong>Invoice #:</strong> {{ order.id }}</p>
+                    <p><strong>Date:</strong> {{ order.date_ordered|date:"d M, Y" }}</p>
+                    <p><strong>Customer:</strong> {{ order.full_name }}</p>
+                    <p><strong>Phone:</strong> {{ order.phone }}</p>
+                </div>
+            </div>
 
-    <div class="footer">
-        <p>Thank you for shopping with us!</p>
-        <p>Visit Again!</p>
+            <div class="invoice-divider"></div>
+
+            <!-- Items Table -->
+            <table class="items-table">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th class="text-right">Quantity</th>
+                        <th class="text-right">Unit Price</th>
+                        <th class="text-right">Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in order_items %}
+                    <tr>
+                        <td>{{ item.product.name }}</td>
+                        <td class="text-right">{{ item.quantity }}</td>
+                        <td class="text-right">Rs. {{ item.unit_price|floatformat:0 }}</td>
+                        <td class="text-right" style="color: #0db04b; font-weight: 600;">Rs. {{ item.subtotal|floatformat:0 }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" style="text-align: center; color: #999;">No items ordered</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- Summary -->
+            <div class="summary-box">
+                <div class="summary-row total">
+                    <span>Total Amount</span>
+                    <span>Rs. {{ order.total_amount|floatformat:0 }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="invoice-footer">
+            <p class="thank-you">Thank you for shopping with Hamro Agro Farm!</p>
+            <p>We appreciate your business and look forward to serving you again.</p>
+            <p style="margin-top: 15px; font-weight: 600; color: #0db04b;">Visit Again!</p>
+        </div>
     </div>
 </body>
 </html>

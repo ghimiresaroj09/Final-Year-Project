@@ -2,37 +2,278 @@
 
 {% block content %}
 
-<div class="container">
-    <h2 class="text-center">Order History</h2><br>
+<style>
+/* Order History Page */
+.order-history-container {
+  min-height: 70vh;
+  padding: 60px 20px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #f0f1f3 100%);
+}
 
-    {% if orders %}
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Order ID</th>
-                    <th>Date Ordered</th>
-                    <th>Total Amount</th>
-                    <th>Shipping Status</th>
-                    <th>Date Shipped</th>
-                    <th>Details</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for order in orders %}
-                <tr>
-                    <td>{{ order.id }}</td>
-                    <td>{{ order.date_ordered}}</td>
-                    <td>Rs.{{ order.total_amount }}</td>
-                    <td>{{ order.shipping_status|yesno:"Shipped,Not Shipped" }}</td>
-                    <td>{{ order.date_shipped}}</td>
-                    <td><a href="{% url 'order_confirmation' order.id %}" class="btn btn-info">View Details</a></td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
-        <p class="text-center">You have no orders yet.</p>
-    {% endif %}
+.order-history-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.order-history-header h2 {
+  font-size: 32px;
+  font-weight: 800;
+  color: #0f1419;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  letter-spacing: -0.5px;
+}
+
+.order-history-header h2 i {
+  color: #0db04b;
+  font-size: 36px;
+}
+
+.order-history-header p {
+  color: #666;
+  font-size: 15px;
+  margin: 0;
+}
+
+.orders-table-wrapper {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  border: 1px solid rgba(13, 176, 75, 0.1);
+}
+
+.orders-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.orders-table thead {
+  background: linear-gradient(135deg, #f8f9fa 0%, #f0f1f3 100%);
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.orders-table th {
+  padding: 20px;
+  text-align: left;
+  font-weight: 700;
+  color: #0f1419;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.orders-table td {
+  padding: 18px 20px;
+  border-bottom: 1px solid #e0e0e0;
+  color: #666;
+  font-size: 15px;
+}
+
+.orders-table tbody tr {
+  transition: all 0.3s ease;
+}
+
+.orders-table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+.orders-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.order-id {
+  font-weight: 700;
+  color: #0db04b;
+}
+
+.order-amount {
+  color: #0db04b;
+  font-weight: 600;
+}
+
+.order-date {
+  color: #999;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-shipped {
+  background: linear-gradient(135deg, rgba(13, 176, 75, 0.15) 0%, rgba(13, 176, 75, 0.08) 100%);
+  color: #0db04b;
+  border: 1px solid rgba(13, 176, 75, 0.2);
+}
+
+.status-pending {
+  background: linear-gradient(135deg, rgba(255, 193, 7, 0.2) 0%, rgba(255, 193, 7, 0.1) 100%);
+  color: #856404;
+  border: 1px solid rgba(255, 193, 7, 0.3);
+}
+
+.btn-view-details {
+  background: linear-gradient(135deg, #0db04b 0%, #0a9a3f 100%);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(13, 176, 75, 0.15);
+  font-size: 13px;
+}
+
+.btn-view-details:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(13, 176, 75, 0.25);
+  text-decoration: none;
+  color: white;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 80px 40px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+.empty-state-icon {
+  font-size: 80px;
+  color: #0db04b;
+  margin-bottom: 20px;
+  opacity: 0.8;
+}
+
+.empty-state h3 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #0f1419;
+  margin-bottom: 15px;
+}
+
+.empty-state p {
+  color: #666;
+  font-size: 15px;
+  margin-bottom: 30px;
+}
+
+.btn-continue-shopping {
+  background: linear-gradient(135deg, #0db04b 0%, #0a9a3f 100%);
+  color: white;
+  padding: 12px 30px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(13, 176, 75, 0.3);
+}
+
+.btn-continue-shopping:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(13, 176, 75, 0.4);
+  text-decoration: none;
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .order-history-container {
+    padding: 40px 15px;
+  }
+
+  .order-history-header h2 {
+    font-size: 24px;
+  }
+
+  .orders-table th,
+  .orders-table td {
+    padding: 12px 10px;
+    font-size: 13px;
+  }
+
+  .orders-table {
+    font-size: 12px;
+  }
+}
+</style>
+
+<div class="order-history-container">
+  <div class="order-history-header">
+    <h2><i class="bi bi-receipt-cutoff"></i>Order History</h2>
+    <p>View and manage all your orders</p>
+  </div>
+
+  {% if orders %}
+    <div class="orders-table-wrapper">
+      <table class="orders-table">
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Date Ordered</th>
+            <th>Total Amount</th>
+            <th>Status</th>
+            <th>Date Shipped</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for order in orders %}
+          <tr>
+            <td class="order-id">#{{ order.id }}</td>
+            <td class="order-date">{{ order.date_ordered|date:"d M, Y" }}</td>
+            <td class="order-amount">Rs. {{ order.total_amount|floatformat:0 }}</td>
+            <td>
+              {% if order.shipping_status %}
+              <span class="status-badge status-shipped">
+                <i class="bi bi-check-circle-fill"></i>Shipped
+              </span>
+              {% else %}
+              <span class="status-badge status-pending">
+                <i class="bi bi-clock-history"></i>Pending
+              </span>
+              {% endif %}
+            </td>
+            <td class="order-date">{{ order.date_shipped|default:"—" }}</td>
+            <td>
+              <a href="{% url 'order_confirmation' order.id %}" class="btn-view-details">
+                <i class="bi bi-eye"></i>View
+              </a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="empty-state">
+      <div class="empty-state-icon">
+        <i class="bi bi-cart-x"></i>
+      </div>
+      <h3>No Orders Yet</h3>
+      <p>You haven't placed any orders. Start shopping now!</p>
+      <a href="{% url 'home' %}" class="btn-continue-shopping">
+        <i class="bi bi-shop"></i>Continue Shopping
+      </a>
+    </div>
+  {% endif %}
 </div>
 
 {% endblock %}

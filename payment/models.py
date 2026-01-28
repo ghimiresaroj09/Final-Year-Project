@@ -10,6 +10,7 @@ class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     full_name = models.CharField(max_length=250)
     email = models.EmailField(max_length=250)
+    phone = models.CharField(max_length=15, blank=True, null=True)
     shipping_address = models.TextField(max_length=15000)
     total_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     date_ordered = models.DateTimeField(auto_now_add=True)    
@@ -37,7 +38,7 @@ class OrderItem(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
 
     quantity = models.PositiveIntegerField(default=1)
-    unit_price = models.DecimalField(max_digits=10, decimal_places=2)
+    unit_price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     subtotal = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     def __str__(self):

@@ -32,6 +32,7 @@ def checkout(request):
         # Get user information from request
         full_name = request.POST.get('full_name')
         email = request.POST.get('email')
+        phone = request.POST.get('phone')
         shipping_address = request.POST.get('shipping_address')
 
         # Create Order
@@ -39,6 +40,7 @@ def checkout(request):
             user=request.user,
             full_name=full_name,
             email=email,
+            phone=phone,
             shipping_address=shipping_address,
             total_amount=cart.cart_total(),  # Calculate total amount
         )
