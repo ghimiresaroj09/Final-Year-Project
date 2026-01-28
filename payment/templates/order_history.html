@@ -208,11 +208,11 @@
 
 @media (max-width: 768px) {
   .order-history-container {
-    padding: 40px 15px;
+    padding: 20px 12px;
   }
 
   .order-history-header h2 {
-    font-size: 24px;
+    font-size: 20px;
   }
 
   .orders-table th,
@@ -222,8 +222,42 @@
   }
 
   .orders-table {
-    font-size: 12px;
+    font-size: 13px;
   }
+
+  /* Mobile: convert table rows into card-like blocks */
+  .orders-table thead { display: none; }
+  .orders-table, .orders-table tbody, .orders-table tr, .orders-table td {
+    display: block;
+    width: 100%;
+  }
+  .orders-table tr {
+    margin-bottom: 12px;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    padding: 10px;
+    background: #fff;
+  }
+  .orders-table td {
+    padding: 8px 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: none;
+  }
+  .orders-table td:before {
+    content: attr(data-label);
+    flex: 0 0 48%;
+    color: #555;
+    font-weight: 700;
+  }
+  .orders-table td .btn-view-details {
+    width: 100%;
+    justify-content: center;
+    padding: 8px 10px;
+  }
+  .orders-table td.order-amount, .orders-table td.order-id { font-weight: 700; }
+  .orders-table-wrapper { padding: 12px; }
 }
 </style>
 
@@ -249,10 +283,10 @@
         <tbody>
           {% for order in orders %}
           <tr>
-            <td class="order-id">#{{ order.id }}</td>
-            <td class="order-date">{{ order.date_ordered|date:"d M, Y" }}</td>
-            <td class="order-amount">Rs. {{ order.total_amount|floatformat:0 }}</td>
-            <td>
+            <td class="order-id" data-label="Order ID">#{{ order.id }}</td>
+            <td class="order-date" data-label="Date Ordered">{{ order.date_ordered|date:"d M, Y" }}</td>
+            <td class="order-amount" data-label="Total Amount">Rs. {{ order.total_amount|floatformat:0 }}</td>
+            <td data-label="Status">
               {% if order.shipping_status == 'pending' %}
               <span class="status-badge status-pending">
                 <i class="bi bi-clock-history"></i>Pending
@@ -271,8 +305,8 @@
               </span>
               {% endif %}
             </td>
-            <td class="order-date">{{ order.date_shipped|default:"—" }}</td>
-            <td>
+            <td class="order-date" data-label="Date Shipped">{{ order.date_shipped|default:"—" }}</td>
+            <td data-label="Action">
               <a href="{% url 'order_confirmation' order.id %}" class="btn-view-details">
                 <i class="bi bi-eye"></i>View
               </a>
