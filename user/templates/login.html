@@ -67,6 +67,35 @@
     box-shadow: 0 0 0 3px rgba(13, 176, 75, 0.1);
   }
 
+  .password-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .password-container input {
+    width: 100%;
+  }
+
+  .password-toggle {
+    position: absolute;
+    right: 12px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #666;
+    font-size: 18px;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.3s ease;
+  }
+
+  .password-toggle:hover {
+    color: #0db04b;
+  }
+
   .form-check {
     display: flex;
     align-items: center;
@@ -197,14 +226,19 @@
       
       <div class="form-group">
         <label for="password" class="form-label"><i class="bi bi-lock-fill me-2"></i>Password</label>
-        <input
-          type="password"
-          class="form-control"
-          name="password"
-          id="password"
-          placeholder="Enter your password"
-          required
-        />
+        <div class="password-container">
+          <input
+            type="password"
+            class="form-control password-field"
+            name="password"
+            id="password"
+            placeholder="Enter your password"
+            required
+          />
+          <button type="button" class="password-toggle" onclick="togglePassword('password')">
+            <i class="bi bi-eye" id="password-icon"></i>
+          </button>
+        </div>
       </div>
 
       <div class="auth-options">
@@ -225,5 +259,22 @@
     </div>
   </div>
 </div>
+
+<script>
+  function togglePassword(fieldId) {
+    const passwordField = document.getElementById(fieldId);
+    const iconElement = document.getElementById(fieldId + '-icon');
+    
+    if (passwordField.type === 'password') {
+      passwordField.type = 'text';
+      iconElement.classList.remove('bi-eye');
+      iconElement.classList.add('bi-eye-slash');
+    } else {
+      passwordField.type = 'password';
+      iconElement.classList.remove('bi-eye-slash');
+      iconElement.classList.add('bi-eye');
+    }
+  }
+</script>
 
 {% endblock %}
