@@ -43,7 +43,7 @@
             </a>
           </div>
           
-          <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4">
+          <div class="row gx-4 gx-lg-5 row-cols-1 row-cols-md-3 row-cols-xl-4">
             {% for product in products %}
               <div class="col mb-5">
                 <div class="product-card">
@@ -560,6 +560,32 @@
         alertify.error('Error adding to cart');
       }
     });
+  });
+
+  // Lazy Loading for Images with Enhanced Fallback
+  function lazyLoadImages() {
+    // Lazy loading removed - images load directly
+    console.log('Images loaded directly from src attribute');
+  }
+
+  // Infinite Scrolling DISABLED - Use proper pagination instead
+  // The infinite scroll was causing issues with category-based pagination
+  // (appending all products from next page to the last category)
+
+
+  // Initialize lazy loading on page load - with multiple fallbacks
+  function initLazyLoading() {
+    lazyLoadImages();
+  }
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initLazyLoading);
+  } else {
+    initLazyLoading();
+  }
+  
+  $(document).ready(function() {
+    lazyLoadImages();
   });
 </script>
 

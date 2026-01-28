@@ -61,22 +61,39 @@ def checkout(request):
 
         order_items = OrderItem.objects.filter(order=order)
 
-        # Prepare and send email
-        subject = 'New Order Alert'
-        html_content = render_to_string('order_alert_email.html', {
+        # Prepare and send email to owner
+        subject_owner = 'New Order Alert'
+        html_content_owner = render_to_string('order_alert_email.html', {
             'order': order,
             'order_items': order_items,
         })
-        text_content = strip_tags(html_content)
+        text_content_owner = strip_tags(html_content_owner)
 
-        email = EmailMultiAlternatives(
-            subject=subject,
-            body=text_content,
+        email_owner = EmailMultiAlternatives(
+            subject=subject_owner,
+            body=text_content_owner,
             from_email='hamroagrofarm@gmail.com',
             to=['hamroagrofarm@gmail.com'],
         )
-        email.attach_alternative(html_content, "text/html")
-        email.send()
+        email_owner.attach_alternative(html_content_owner, "text/html")
+        email_owner.send()
+
+        # Prepare and send order confirmation email to user
+        subject_user = 'Order Confirmation - Hamro Agro Farm'
+        html_content_user = render_to_string('order_confirmation_email.html', {
+            'order': order,
+            'order_items': order_items,
+        })
+        text_content_user = strip_tags(html_content_user)
+
+        email_user = EmailMultiAlternatives(
+            subject=subject_user,
+            body=text_content_user,
+            from_email='hamroagrofarm@gmail.com',
+            to=[order.email],
+        )
+        email_user.attach_alternative(html_content_user, "text/html")
+        email_user.send()
 
         # Clear the session cart
         request.session['cart'] = {}
@@ -87,7 +104,7 @@ def checkout(request):
             profile.old_cart = "{}"  # Set it to an empty dictionary (or None)
             profile.save()
 
-        messages.success(request, 'Your order has been placed successfully, and an email has been sent to the owner.')
+        messages.success(request, 'Your order has been placed successfully! A confirmation email has been sent to you.')
 
         # Redirect to the order confirmation page
         return redirect('order_confirmation', order_id=order.id)

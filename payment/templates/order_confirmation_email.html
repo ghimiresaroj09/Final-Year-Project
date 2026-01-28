@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Order Confirmation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .header {
+            background-color: #0db04b;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px 8px 0 0;
+            margin: -20px -20px 20px -20px;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .order-info {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-left: 4px solid #0db04b;
+            margin: 20px 0;
+        }
+        .order-info p {
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        table thead {
+            background-color: #f0f0f0;
+            border-bottom: 2px solid #0db04b;
+        }
+        table th {
+            padding: 12px;
+            text-align: left;
+            font-weight: bold;
+            color: #333;
+        }
+        table td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+        table tbody tr:hover {
+            background-color: #f5f5f5;
+        }
+        .total-row {
+            background-color: #f0f0f0;
+            font-weight: bold;
+        }
+        .total-row td {
+            border-bottom: 2px solid #0db04b;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            color: #666;
+            font-size: 12px;
+        }
+        .status-badge {
+            display: inline-block;
+            background-color: #ffc107;
+            color: #333;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 12px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>✓ Order Confirmed</h1>
+            <p>Thank you for your purchase!</p>
+        </div>
+
+        <p>Dear {{ order.full_name }},</p>
+
+        <p>Your order has been successfully placed! We're processing it right now and will keep you updated on your shipment status.</p>
+
+        <div class="order-info">
+            <strong>Order Details</strong>
+            <p><strong>Order ID:</strong> #{{ order.id }}</p>
+            <p><strong>Order Date:</strong> {{ order.date_ordered|date:"d/m/Y H:i" }}</p>
+            <p><strong>Shipping Address:</strong> {{ order.shipping_address }}</p>
+            <div class="status-badge">Processing</div>
+        </div>
+
+        <h3>Order Items</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Unit Price</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in order_items %}
+                <tr>
+                    <td>{{ item.product.name }}</td>
+                    <td style="text-align: center;">{{ item.quantity }}</td>
+                    <td>Rs.{{ item.unit_price }}</td>
+                    <td style="text-align: right;">Rs.{{ item.subtotal }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4">No items found</td>
+                </tr>
+                {% endfor %}
+                <tr class="total-row">
+                    <td colspan="3" style="text-align: right;">Total Amount:</td>
+                    <td style="text-align: right;">Rs.{{ order.total_amount }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="order-info">
+            <strong>Next Steps</strong>
+            <p>Your order is being prepared. We will send you an update with tracking information as soon as it ships.</p>
+            <p>If you have any questions about your order, please don't hesitate to contact us at <strong>hamroagrofarm@gmail.com</strong></p>
+        </div>
+
+        <div class="footer">
+            <p><strong>Hamro Agro Farm</strong></p>
+            <p>Fresh Organic Products Direct from Farm to Table</p>
+            <p>Email: hamroagrofarm@gmail.com</p>
+        </div>
+    </div>
+</body>
+</html>

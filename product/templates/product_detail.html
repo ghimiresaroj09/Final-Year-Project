@@ -103,25 +103,34 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 10px 18px;
+  padding: 12px 20px;
   background: linear-gradient(135deg, rgba(13, 176, 75, 0.15) 0%, rgba(13, 176, 75, 0.08) 100%);
   color: #0db04b;
   border-radius: 10px;
   font-weight: 600;
   font-size: 15px;
   margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(13, 176, 75, 0.1);
+  border: 1px solid rgba(13, 176, 75, 0.2);
 }
 
 .stock-badge i {
   font-size: 18px;
+  animation: stock-pulse 2s infinite;
+}
+
+@keyframes stock-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
 }
 
 .quantity-section {
   margin: 30px 0;
   padding: 25px;
-  background: white;
+  background: linear-gradient(135deg, #f8f9fa 0%, #f0f1f3 100%);
   border-radius: 12px;
-  border: 2px solid #f0f0f0;
+  border: 2px solid #e8e9eb;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .quantity-label {
@@ -129,20 +138,26 @@
   margin-bottom: 15px;
   color: #0f1419;
   display: block;
+  text-align: center;
+  font-size: 15px;
+  letter-spacing: 0.3px;
 }
 
 .quantity-control-large {
   display: flex;
   align-items: center;
-  gap: 10px;
-  background: #f8f9fa;
-  padding: 10px;
+  gap: 12px;
+  background: white;
+  padding: 12px 16px;
   border-radius: 10px;
   width: fit-content;
+  margin: 0 auto;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e8e9eb;
 }
 
 .qty-btn-large {
-  background-color: #0db04b;
+  background: linear-gradient(135deg, #0db04b 0%, #0a9a3f 100%);
   color: white;
   border: none;
   width: 44px;
@@ -150,19 +165,25 @@
   border-radius: 8px;
   cursor: pointer;
   font-size: 18px;
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
   justify-content: center;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(13, 176, 75, 0.15);
 }
 
 .qty-btn-large:hover {
-  background-color: #0a9a3f;
-  transform: scale(1.05);
+  transform: scale(1.08);
+  box-shadow: 0 4px 12px rgba(13, 176, 75, 0.25);
+}
+
+.qty-btn-large:active {
+  transform: scale(1.02);
 }
 
 .qty-input-large {
-  border: 2px solid #ddd;
+  border: 2px solid #e0e0e0;
   border-radius: 8px;
   padding: 10px 15px;
   font-weight: 700;
@@ -171,12 +192,13 @@
   width: 80px;
   background: white;
   color: #0f1419;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .qty-input-large:focus {
   border-color: #0db04b;
   outline: none;
-  box-shadow: 0 0 0 3px rgba(13, 176, 75, 0.1);
+  box-shadow: 0 0 0 3px rgba(13, 176, 75, 0.15);
 }
 
 .action-buttons {
@@ -195,29 +217,32 @@
   font-weight: 600;
   border-radius: 10px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(13, 176, 75, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 15px rgba(13, 176, 75, 0.3);
   flex: 1;
   min-width: 200px;
+  letter-spacing: 0.3px;
 }
 
 .btn-add-to-cart:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(13, 176, 75, 0.4);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(13, 176, 75, 0.4);
 }
 
 .btn-add-to-cart:active:not(:disabled) {
-  transform: translateY(0);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(13, 176, 75, 0.3);
 }
 
 .btn-add-to-cart:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .out-of-stock-message {
-  background: rgba(220, 53, 69, 0.1);
-  color: #dc3545;
+  background: linear-gradient(135deg, rgba(220, 53, 69, 0.12) 0%, rgba(220, 53, 69, 0.06) 100%);
+  color: #c82333;
   padding: 20px;
   border-radius: 10px;
   border-left: 4px solid #dc3545;
@@ -226,12 +251,14 @@
   display: flex;
   align-items: center;
   gap: 10px;
+  box-shadow: 0 2px 8px rgba(220, 53, 69, 0.1);
 }
 
 /* Related Products Section */
 .related-section {
   background: white;
   padding: 60px 0;
+  border-top: 1px solid #f0f0f0;
 }
 
 .related-title {
@@ -241,6 +268,7 @@
   margin-bottom: 40px;
   position: relative;
   padding-bottom: 20px;
+  letter-spacing: -0.5px;
 }
 
 .related-title::after {
@@ -252,6 +280,11 @@
   height: 4px;
   background: linear-gradient(90deg, #0db04b 0%, #85d764 100%);
   border-radius: 2px;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.related-title:hover::after {
+  width: 100px;
 }
 
 .related-card {
@@ -259,20 +292,22 @@
   border: 2px solid #f0f0f0;
   border-radius: 12px;
   overflow: hidden;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .related-card:hover {
   border-color: #0db04b;
-  box-shadow: 0 8px 20px rgba(13, 176, 75, 0.15);
-  transform: translateY(-5px);
+  box-shadow: 0 8px 24px rgba(13, 176, 75, 0.15);
+  transform: translateY(-6px);
 }
 
 .related-card-img {
   width: 100%;
   height: 200px;
   object-fit: cover;
-  transition: transform 0.3s ease;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
 }
 
 .related-card:hover .related-card-img {
@@ -281,6 +316,8 @@
 
 .related-card-body {
   padding: 20px;
+  display: flex;
+  flex-direction: column;
 }
 
 .related-card-title {
@@ -291,6 +328,12 @@
   display: flex;
   align-items: center;
   font-size: 14px;
+  line-height: 1.4;
+  transition: color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.related-card:hover .related-card-title {
+  color: #0db04b;
 }
 
 .related-card-price {
@@ -327,33 +370,350 @@
   font-weight: 600;
   text-decoration: none;
   text-align: center;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: inline-block;
+  box-shadow: 0 2px 8px rgba(13, 176, 75, 0.1);
 }
 
 .btn-view-product:hover {
   background: #0db04b;
   color: white;
   transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(13, 176, 75, 0.25);
+}
+
+.btn-view-product:active {
+  transform: translateY(0);
+}
+
+/* Desktop and Mobile View Toggles */
+.desktop-related-products {
+  display: block;
+}
+
+.mobile-related-products {
+  display: none;
+}
+
+/* Desktop Grid Styles */
+.desktop-related-products .related-card {
+  background: white;
+  border: 2px solid #f0f0f0;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.desktop-related-products .related-card:hover {
+  border-color: #0db04b;
+  box-shadow: 0 8px 20px rgba(13, 176, 75, 0.15);
+  transform: translateY(-5px);
+}
+
+/* Mobile Carousel Styles */
+#relatedProductsCarousel {
+  margin-bottom: 30px;
+}
+
+#relatedProductsCarousel .carousel-item {
+  padding: 20px 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#relatedProductsCarousel .carousel-control-prev,
+#relatedProductsCarousel .carousel-control-next {
+  background: linear-gradient(135deg, #0db04b 0%, #0a9a3f 100%);
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  opacity: 0.85;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  top: 50%;
+  transform: translateY(-50%);
+  box-shadow: 0 4px 12px rgba(13, 176, 75, 0.3);
+  border: none;
+}
+
+#relatedProductsCarousel .carousel-control-prev:hover,
+#relatedProductsCarousel .carousel-control-next:hover {
+  opacity: 1;
+  background: linear-gradient(135deg, #0a9a3f 0%, #067a2a 100%);
+  box-shadow: 0 6px 16px rgba(13, 176, 75, 0.4);
+  transform: translateY(-50%) scale(1.05);
+}
+
+#relatedProductsCarousel .carousel-control-prev {
+  left: 0;
+}
+
+#relatedProductsCarousel .carousel-control-next {
+  right: 0;
+}
+
+#relatedProductsCarousel .carousel-indicators {
+  bottom: -40px;
+}
+
+#relatedProductsCarousel .carousel-indicators button {
+  background: #ddd;
+  border-radius: 50%;
+  width: 12px;
+  height: 12px;
+  margin: 0 6px;
+  border: 2px solid transparent;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#relatedProductsCarousel .carousel-indicators button:hover {
+  background: #0db04b;
+  transform: scale(1.15);
+}
+
+#relatedProductsCarousel .carousel-indicators button.active {
+  background: #0db04b;
+  border-color: #0db04b;
+  box-shadow: 0 4px 8px rgba(13, 176, 75, 0.3);
+}
+
+@media (max-width: 991px) {
+  /* Show carousel on tablets and below */
+  .desktop-related-products {
+    display: none;
+  }
+
+  .mobile-related-products {
+    display: block;
+  }
 }
 
 @media (max-width: 768px) {
-  .product-title {
-    font-size: 26px;
+  .product-detail-section {
+    padding: 30px 0;
+    margin-bottom: 20px;
+  }
+
+  .product-image-box {
+    padding: 15px;
+    margin-bottom: 20px;
+  }
+
+  .product-image-box img {
+    border-radius: 8px;
+  }
+
+  .sale-badge-large {
+    top: 20px;
+    left: 20px;
+    padding: 8px 16px;
+    font-size: 13px;
   }
 
   .product-info-box {
+    padding: 20px 15px;
+  }
+
+  .product-title {
+    font-size: 24px;
+    margin-bottom: 15px;
+  }
+
+  .product-description {
+    font-size: 14px;
+    padding: 15px;
+    margin-bottom: 20px;
+  }
+
+  .price-section {
+    margin: 20px 0;
     padding: 20px;
   }
 
+  .price-display {
+    font-size: 24px;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .original-price-large {
+    font-size: 18px;
+  }
+
+  .stock-badge {
+    padding: 8px 15px;
+    font-size: 13px;
+    margin-bottom: 15px;
+  }
+
+  .stock-badge i {
+    font-size: 16px;
+  }
+
+  .quantity-section {
+    margin: 20px 0;
+    padding: 20px;
+  }
+
+  .quantity-label {
+    margin-bottom: 12px;
+    font-size: 14px;
+  }
+
+  .quantity-control-large {
+    gap: 8px;
+    padding: 8px;
+  }
+
+  .qty-btn-large {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+  }
+
+  .qty-input-large {
+    padding: 8px 12px;
+    font-size: 14px;
+    width: 70px;
+  }
+
   .action-buttons {
+    margin: 20px 0;
+    gap: 10px;
     flex-direction: column;
   }
 
   .btn-add-to-cart {
+    padding: 12px 30px;
+    font-size: 15px;
     min-width: auto;
-    flex: 1;
+    width: 100%;
   }
+
+  .out-of-stock-message {
+    padding: 15px;
+    font-size: 14px;
+  }
+
+  .related-section {
+    padding: 40px 0;
+  }
+
+  .related-title {
+    font-size: 24px;
+    margin-bottom: 30px;
+  }
+
+  .related-card-body {
+    padding: 15px;
+  }
+
+  .related-card-title {
+    font-size: 13px;
+    min-height: auto;
+  }
+
+  .related-card-price {
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+
+  .btn-view-product {
+    padding: 8px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 576px) {
+  .product-detail-section {
+    padding: 20px 0;
+  }
+
+  .product-image-box {
+    padding: 10px;
+  }
+
+  .sale-badge-large {
+    top: 15px;
+    left: 15px;
+    padding: 6px 12px;
+    font-size: 11px;
+  }
+
+  .product-info-box {
+    padding: 15px 12px;
+  }
+
+  .product-title {
+    font-size: 20px;
+    margin-bottom: 12px;
+    line-height: 1.2;
+  }
+
+  .product-description {
+    font-size: 13px;
+    padding: 12px;
+    margin-bottom: 15px;
+    line-height: 1.6;
+  }
+
+  .price-section {
+    margin: 15px 0;
+    padding: 15px;
+  }
+
+  .price-display {
+    font-size: 20px;
+  }
+
+  .original-price-large {
+    font-size: 16px;
+  }
+
+  .stock-badge {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  .quantity-section {
+    margin: 15px 0;
+    padding: 15px;
+  }
+
+  .quantity-label {
+    font-size: 13px;
+    margin-bottom: 10px;
+  }
+
+  .qty-btn-large {
+    width: 36px;
+    height: 36px;
+    font-size: 14px;
+  }
+
+  .qty-input-large {
+    padding: 6px 10px;
+    font-size: 13px;
+    width: 60px;
+  }
+
+  .btn-add-to-cart {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+
+  .related-section {
+    padding: 30px 0;
+  }
+
+  .related-title {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+
+  .related-title::after {
+    width: 40px;
+  }
+}
 
   .related-section {
     padding: 40px 0;
@@ -487,50 +847,133 @@
   <div class="container px-4 px-lg-5">
     <h2 class="related-title">You Might Also Like</h2>
     
-    <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4">
-      {% for related_product in related_products %}
-        <div class="col mb-5">
-          <div class="related-card">
-            <div style="position: relative; overflow: hidden; height: 200px;">
-              {% if related_product.is_sale %}
-                <div style="position: absolute; top: 10px; right: 10px; background: #dc3545; color: white; padding: 6px 12px; border-radius: 6px; font-weight: 600; font-size: 12px; z-index: 10;">
-                  Sale
-                </div>
-              {% endif %}
-              <img
-                src="{{ related_product.image.url }}"
-                alt="{{ related_product.name }}"
-                class="related-card-img"
-              />
-            </div>
-            
-            <div class="related-card-body">
-              <h5 class="related-card-title">{{ related_product.name }}</h5>
-              
-              {% if not related_product.out_of_stock %}
+    {% if related_products %}
+    
+    <!-- Desktop Grid View (4 columns) -->
+    <div id="desktopGrid" class="desktop-related-products">
+      <div class="row gx-4 gx-lg-5 row-cols-1 row-cols-md-2 row-cols-lg-4">
+        {% for related_product in related_products|slice:":4" %}
+          <div class="col mb-5">
+            <div class="related-card">
+              <div style="position: relative; overflow: hidden; height: 200px;">
                 {% if related_product.is_sale %}
-                  <div class="related-card-price sale">
-                    <span class="original">Rs. {{ related_product.price }}</span>
-                    <span class="current">Rs. {{ related_product.sale_price }}</span>
+                  <div style="position: absolute; top: 10px; right: 10px; background: #dc3545; color: white; padding: 6px 12px; border-radius: 6px; font-weight: 600; font-size: 12px; z-index: 10;">
+                    Sale
                   </div>
-                {% else %}
-                  <div class="related-card-price">Rs. {{ related_product.price }}</div>
                 {% endif %}
-              {% else %}
-                <div style="color: #dc3545; font-weight: 600; margin-bottom: 15px;">Out of Stock</div>
-              {% endif %}
+                <img
+                  src="{{ related_product.image.url }}"
+                  alt="{{ related_product.name }}"
+                  class="related-card-img"
+                />
+              </div>
               
-              <a
-                class="btn-view-product"
-                href="{% url 'product' related_product.id %}"
-              >
-                View Product
-              </a>
+              <div class="related-card-body">
+                <h5 class="related-card-title">{{ related_product.name }}</h5>
+                
+                {% if not related_product.out_of_stock %}
+                  {% if related_product.is_sale %}
+                    <div class="related-card-price sale">
+                      <span class="original">Rs. {{ related_product.price }}</span>
+                      <span class="current">Rs. {{ related_product.sale_price }}</span>
+                    </div>
+                  {% else %}
+                    <div class="related-card-price">Rs. {{ related_product.price }}</div>
+                  {% endif %}
+                {% else %}
+                  <div style="color: #dc3545; font-weight: 600; margin-bottom: 15px;">Out of Stock</div>
+                {% endif %}
+                
+                <a
+                  class="btn-view-product"
+                  href="{% url 'product' related_product.id %}"
+                >
+                  View Product
+                </a>
+              </div>
             </div>
           </div>
-        </div>
-      {% endfor %}
+        {% endfor %}
+      </div>
     </div>
+    
+    <!-- Mobile Carousel View (8 products with carousel) -->
+    <div id="mobileCarousel" class="mobile-related-products">
+      <div id="relatedProductsCarousel" class="carousel slide" data-bs-interval="false">
+        <div class="carousel-inner">
+          {% for related_product in related_products|slice:":8" %}
+            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+              <div class="row">
+                <div class="col-12">
+                  <div style="position: relative; overflow: hidden; height: 250px; border-radius: 12px;">
+                    {% if related_product.is_sale %}
+                      <div style="position: absolute; top: 10px; right: 10px; background: #dc3545; color: white; padding: 6px 12px; border-radius: 6px; font-weight: 600; font-size: 12px; z-index: 10;">
+                        Sale
+                      </div>
+                    {% endif %}
+                    <img
+                      src="{{ related_product.image.url }}"
+                      alt="{{ related_product.name }}"
+                      class="related-card-img"
+                      style="width: 100%; height: 100%; object-fit: cover;"
+                    />
+                  </div>
+                  
+                  <div class="related-card-body">
+                    <h5 class="related-card-title">{{ related_product.name }}</h5>
+                    
+                    {% if not related_product.out_of_stock %}
+                      {% if related_product.is_sale %}
+                        <div class="related-card-price sale">
+                          <span class="original">Rs. {{ related_product.price }}</span>
+                          <span class="current">Rs. {{ related_product.sale_price }}</span>
+                        </div>
+                      {% else %}
+                        <div class="related-card-price">Rs. {{ related_product.price }}</div>
+                      {% endif %}
+                    {% else %}
+                      <div style="color: #dc3545; font-weight: 600; margin-bottom: 15px;">Out of Stock</div>
+                    {% endif %}
+                    
+                    <a
+                      class="btn-view-product"
+                      href="{% url 'product' related_product.id %}"
+                    >
+                      View Product
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+        
+        <!-- Carousel Controls -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#relatedProductsCarousel" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#relatedProductsCarousel" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+        
+        <!-- Carousel Indicators -->
+        <div class="carousel-indicators" style="position: relative; margin-top: 20px;">
+          {% for related_product in related_products|slice:":8" %}
+            <button 
+              type="button" 
+              data-bs-target="#relatedProductsCarousel" 
+              data-bs-slide-to="{{ forloop.counter0 }}" 
+              {% if forloop.first %}class="active" aria-current="true"{% endif %}
+              aria-label="Product {{ forloop.counter }}"
+            ></button>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    
+    {% endif %}
   </div>
 </section>
 

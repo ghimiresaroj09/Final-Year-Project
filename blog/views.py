@@ -42,7 +42,7 @@ def blog_list(request):
     context = {
         'page_obj': page_obj,
         'posts': page_obj.object_list,
-        'categories': categories,
+        'blog_categories': categories,
         'featured_posts': featured_posts,
         'search_query': search_query,
         'selected_category': category_slug,

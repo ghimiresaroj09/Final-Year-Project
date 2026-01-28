@@ -13,9 +13,10 @@
 .cart-header {
   margin-bottom: 40px;
   padding: 30px;
-  background: white;
+  background: linear-gradient(135deg, white 0%, #f8f9fa 100%);
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.03);
 }
 
 .cart-header h1 {
@@ -26,15 +27,21 @@
   display: flex;
   align-items: center;
   gap: 12px;
+  letter-spacing: -0.5px;
 }
 
 .cart-header h1 i {
   color: #0db04b;
+  font-size: 36px;
 }
 
 .cart-count {
   color: #0db04b;
   font-weight: 700;
+  background: rgba(13, 176, 75, 0.1);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 16px;
 }
 
 .cart-item {
@@ -42,21 +49,23 @@
   margin-bottom: 20px;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  transition: all 0.3s ease;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   border: 2px solid transparent;
 }
 
 .cart-item:hover {
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
   border-color: #0db04b;
+  transform: translateY(-3px);
 }
 
 .cart-item-image {
   width: 100%;
   height: 280px;
   object-fit: cover;
-  transition: transform 0.3s ease;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
 }
 
 .cart-item:hover .cart-item-image {
@@ -72,13 +81,18 @@
   font-weight: 700;
   color: #0f1419;
   margin-bottom: 10px;
+  transition: color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cart-item:hover .cart-item-title {
+  color: #0db04b;
 }
 
 .cart-item-description {
   color: #666;
   font-size: 14px;
   margin-bottom: 15px;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
 .cart-item-price {
@@ -105,38 +119,44 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 12px;
-  background: rgba(13, 176, 75, 0.12);
+  padding: 8px 14px;
+  background: linear-gradient(135deg, rgba(13, 176, 75, 0.15) 0%, rgba(13, 176, 75, 0.08) 100%);
   color: #0db04b;
   border-radius: 8px;
   font-size: 14px;
   font-weight: 600;
   margin-bottom: 15px;
+  border: 1px solid rgba(13, 176, 75, 0.2);
+  box-shadow: 0 2px 6px rgba(13, 176, 75, 0.1);
 }
 
 .cart-item-stock.low {
-  background: rgba(255, 193, 7, 0.2);
+  background: linear-gradient(135deg, rgba(255, 193, 7, 0.2) 0%, rgba(255, 193, 7, 0.1) 100%);
   color: #856404;
+  border-color: rgba(255, 193, 7, 0.3);
 }
 
 .cart-item-stock.out {
-  background: rgba(220, 53, 69, 0.12);
-  color: #dc3545;
+  background: linear-gradient(135deg, rgba(220, 53, 69, 0.15) 0%, rgba(220, 53, 69, 0.08) 100%);
+  color: #c82333;
+  border-color: rgba(220, 53, 69, 0.2);
 }
 
 .quantity-adjustment {
   display: flex;
   align-items: center;
-  gap: 10px;
-  background: #f8f9fa;
-  padding: 10px;
+  gap: 12px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #f0f1f3 100%);
+  padding: 12px 16px;
   border-radius: 8px;
   width: fit-content;
   margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  border: 1px solid #e8e9eb;
 }
 
 .qty-btn {
-  background: #0db04b;
+  background: linear-gradient(135deg, #0db04b 0%, #0a9a3f 100%);
   color: white;
   border: none;
   width: 36px;
@@ -146,16 +166,22 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(13, 176, 75, 0.15);
 }
 
 .qty-btn:hover {
-  background: #0a9a3f;
-  transform: scale(1.05);
+  transform: scale(1.08);
+  box-shadow: 0 4px 12px rgba(13, 176, 75, 0.25);
+}
+
+.qty-btn:active {
+  transform: scale(1.02);
 }
 
 .qty-input {
-  border: 2px solid #ddd;
+  border: 2px solid #e0e0e0;
   border-radius: 6px;
   padding: 8px 12px;
   width: 70px;
@@ -163,50 +189,61 @@
   font-weight: 600;
   background: white;
   color: #0f1419;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .qty-input:focus {
   border-color: #0db04b;
   outline: none;
-  box-shadow: 0 0 0 3px rgba(13, 176, 75, 0.1);
+  box-shadow: 0 0 0 3px rgba(13, 176, 75, 0.15);
 }
 
 .cart-actions {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   flex-wrap: wrap;
 }
 
 .btn-update {
-  background: #0db04b;
+  background: linear-gradient(135deg, #0db04b 0%, #0a9a3f 100%);
   color: white;
   border: none;
   padding: 10px 24px;
   border-radius: 6px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(13, 176, 75, 0.15);
 }
 
 .btn-update:hover {
-  background: #0a9a3f;
   transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(13, 176, 75, 0.25);
+}
+
+.btn-update:active {
+  transform: translateY(0);
 }
 
 .btn-remove {
-  background: #dc3545;
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
   color: white;
   border: none;
   padding: 10px 24px;
   border-radius: 6px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(220, 53, 69, 0.15);
 }
 
 .btn-remove:hover {
-  background: #c82333;
   transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.25);
+}
+
+.btn-remove:active {
+  transform: translateY(0);
 }
 
 /* Cart Summary */
@@ -214,10 +251,11 @@
   background: white;
   padding: 30px;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
   position: sticky;
   top: 100px;
   margin-top: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.03);
 }
 
 .cart-summary h3 {
@@ -227,6 +265,7 @@
   margin-bottom: 25px;
   padding-bottom: 15px;
   border-bottom: 2px solid #f0f0f0;
+  letter-spacing: -0.5px;
 }
 
 .summary-row {
@@ -236,6 +275,11 @@
   padding: 12px 0;
   font-size: 16px;
   color: #666;
+  transition: color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.summary-row:hover {
+  color: #0f1419;
 }
 
 .summary-row.total {
@@ -257,13 +301,19 @@
   font-weight: 700;
   cursor: pointer;
   margin-top: 25px;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(13, 176, 75, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 15px rgba(13, 176, 75, 0.3);
+  letter-spacing: 0.3px;
 }
 
 .btn-checkout:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(13, 176, 75, 0.4);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(13, 176, 75, 0.4);
+}
+
+.btn-checkout:active {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(13, 176, 75, 0.3);
 }
 
 .btn-continue {
@@ -277,12 +327,19 @@
   text-align: center;
   text-decoration: none;
   margin-top: 12px;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(13, 176, 75, 0.1);
 }
 
 .btn-continue:hover {
   background: #0db04b;
   color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(13, 176, 75, 0.25);
+}
+
+.btn-continue:active {
+  transform: translateY(0);
 }
 
 /* Empty Cart */
@@ -300,12 +357,19 @@
   color: #0db04b;
   margin-bottom: 20px;
   opacity: 0.8;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
 }
 
 .empty-cart h2 {
   font-size: 28px;
   color: #0f1419;
   margin-bottom: 15px;
+  font-weight: 700;
 }
 
 .empty-cart p {
@@ -362,8 +426,6 @@
                 <div class="col-md-8">
                   <div class="cart-item-body">
                     <h4 class="cart-item-title">{{ product.name }}</h4>
-                    <p class="cart-item-description">{{ product.description }}</p>
-
                     <div class="cart-item-price">
                       {% if product.is_sale %}
                         <span class="original">Rs. {{ product.price }}</span>
@@ -426,18 +488,21 @@
           <div class="cart-summary">
             <h3>Order Summary</h3>
             
-            <div class="summary-row" style="flex-direction: column; align-items: stretch; gap: 8px;">
-              <span style="font-weight: 600; color: #0f1419;">Stock</span>
+            <div class="summary-row" style="flex-direction: column; align-items: stretch; gap: 10px; padding-bottom: 15px; border-bottom: 2px solid #f0f0f0;">
+              <span style="font-weight: 600; color: #0f1419; margin-bottom: 5px;">Items</span>
               {% for product in cart_products %}
-              <span style="font-size: 14px; color: #666;">
-                <i class="bi bi-box-seam" style="color: #0db04b;"></i> {{ product.name|truncatewords:4 }}: <strong>{{ product.on_stock }}</strong> in stock
-              </span>
+              <div style="display: flex; justify-content: space-between; align-items: center; font-size: 14px; color: #666;">
+                <span style="flex: 1;">
+                  <i class="bi bi-bag-fill" style="color: #0db04b; margin-right: 6px;"></i>{{ product.name|truncatewords:4 }}
+                </span>
+                <span style="font-weight: 600; color: #0db04b;">Rs. <span class="price-format">{{ product.price }}</span></span>
+              </div>
               {% endfor %}
             </div>
             
             <div class="summary-row">
               <span>Subtotal</span>
-              <span>Rs. {{ totals }}</span>
+              <span>Rs. <span class="price-format">{{ totals }}</span></span>
             </div>
             {% comment %} <div class="summary-row">
               <span>Shipping</span>
@@ -450,7 +515,7 @@
             
             <div class="summary-row total">
               <span>Total</span>
-              <span>Rs. {{ totals }}</span>
+              <span>Rs. <span class="price-format">{{ totals }}</span></span>
             </div>
 
             <a href="{% url 'checkout' %}" class="btn-checkout">
@@ -473,6 +538,12 @@
 </div>
 
 <script>
+  // Format prices with commas
+  document.querySelectorAll('.price-format').forEach(element => {
+    const price = parseFloat(element.textContent);
+    element.textContent = price.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+  });
+
   // Update quantity with + and - buttons (capped at on_stock)
   document.querySelectorAll('.qty-btn').forEach(button => {
     button.addEventListener('click', function(e) {

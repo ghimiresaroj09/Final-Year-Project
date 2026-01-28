@@ -609,7 +609,7 @@
                   <span style="font-size: 12px;">{{ page_obj.paginator.count }}</span>
                 </a>
               </li>
-              {% for category in categories %}
+              {% for category in blog_categories %}
                 <li>
                   <a href="{% url 'blog:blog_list' %}?category={{ category.slug }}">
                     <span>

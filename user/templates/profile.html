@@ -166,7 +166,13 @@
       <div class="profile-avatar">
         <i class="bi bi-person-fill"></i>
       </div>
-      <h1 class="profile-title">{{ user.first_name|default:user.username | title }}</h1>
+        <h1 class="profile-title">
+          {% if user.first_name or user.last_name %}
+            {{ user.first_name|title }} {{ user.last_name|title }}
+          {% else %}
+            {{ user.username|title }}
+          {% endif %}
+        </h1>
       <p class="profile-subtitle">@{{ user.username }}</p>
     </div>
 

@@ -1,0 +1,222 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .error-container {
+        min-height: calc(100vh - 200px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        padding: 40px 20px;
+    }
+
+    .error-card {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        padding: 60px 40px;
+        max-width: 600px;
+        text-align: center;
+    }
+
+    .error-icon {
+        font-size: 120px;
+        margin-bottom: 30px;
+        animation: bounce 2s infinite;
+        display: inline-block;
+    }
+
+    @keyframes bounce {
+        0%, 100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-20px);
+        }
+    }
+
+    .error-code {
+        font-size: 80px;
+        font-weight: 900;
+        background: linear-gradient(135deg, #0db04b 0%, #0a9a3f 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin: 20px 0;
+    }
+
+    .error-title {
+        font-size: 32px;
+        font-weight: 700;
+        color: #0f1419;
+        margin: 20px 0;
+    }
+
+    .error-description {
+        font-size: 16px;
+        color: #666;
+        margin: 20px 0 30px 0;
+        line-height: 1.6;
+    }
+
+    .error-actions {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top: 30px;
+    }
+
+    .btn-primary-gradient {
+        display: inline-block;
+        padding: 14px 32px;
+        background: linear-gradient(135deg, #0db04b 0%, #0a9a3f 100%);
+        color: white;
+        text-decoration: none;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 15px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(13, 176, 75, 0.3);
+    }
+
+    .btn-primary-gradient:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(13, 176, 75, 0.4);
+        color: white;
+        text-decoration: none;
+    }
+
+    .btn-secondary-outline {
+        display: inline-block;
+        padding: 14px 32px;
+        background: transparent;
+        color: #0db04b;
+        text-decoration: none;
+        border: 2px solid #0db04b;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 15px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .btn-secondary-outline:hover {
+        background: #f0fdf4;
+        color: #0a9a3f;
+        border-color: #0a9a3f;
+        text-decoration: none;
+    }
+
+    .error-suggestions {
+        background: #f8f9fa;
+        border-left: 4px solid #0db04b;
+        padding: 20px;
+        border-radius: 10px;
+        margin-top: 40px;
+        text-align: left;
+    }
+
+    .error-suggestions h4 {
+        color: #0f1419;
+        font-weight: 600;
+        margin-bottom: 15px;
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .error-suggestions ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .error-suggestions li {
+        color: #666;
+        font-size: 14px;
+        padding: 8px 0;
+        display: flex;
+        align-items: center;
+    }
+
+    .error-suggestions li::before {
+        content: "✓";
+        color: #0db04b;
+        font-weight: bold;
+        margin-right: 10px;
+        font-size: 16px;
+    }
+
+    @media (max-width: 768px) {
+        .error-card {
+            padding: 40px 25px;
+        }
+
+        .error-code {
+            font-size: 60px;
+        }
+
+        .error-title {
+            font-size: 24px;
+        }
+
+        .error-icon {
+            font-size: 80px;
+        }
+
+        .error-actions {
+            flex-direction: column;
+        }
+
+        .btn-primary-gradient,
+        .btn-secondary-outline {
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="error-container">
+    <div class="error-card">
+        <!-- Error Icon -->
+        <div class="error-icon">🚫</div>
+
+        <!-- Error Code -->
+        <div class="error-code">404</div>
+
+        <!-- Error Title -->
+        <h1 class="error-title">Page Not Found</h1>
+
+        <!-- Error Description -->
+        <p class="error-description">
+            Sorry, the page you're looking for doesn't exist or has been moved. 
+            Let's get you back on track!
+        </p>
+
+        <!-- Action Buttons -->
+        <div class="error-actions">
+            <a href="{% url 'home' %}" class="btn-primary-gradient">
+                ← Back to Homepage
+            </a>
+            <a href="{% url 'product' %}" class="btn-secondary-outline">
+                ↓ Browse Products
+            </a>
+        </div>
+
+        <!-- Helpful Suggestions -->
+        <div class="error-suggestions">
+            <h4>What can you do?</h4>
+            <ul>
+                <li>Return to the homepage and navigate from there</li>
+                <li>Browse our product catalog</li>
+                <li>Check out our latest blog posts</li>
+                <li>Visit your account if you're logged in</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

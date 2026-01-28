@@ -71,14 +71,14 @@
       <h2 class="section-title">Top Sales</h2>
       <a href="{% url 'sale' %}" class="view-all-link">Explore More<i class="bi bi-arrow-right ms-2"></i></a>
     </div>
-    <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-4">
+    <div class="row gx-4 gx-lg-5 row-cols-1 row-cols-md-4">
       {% for product in top_sales %}
       <div class="col mb-5">
         <div class="product-card">
           <div class="product-image-wrapper">
             <div class="image-container">
               <a href="{% url 'product' product.id %}">
-                <img class="product-image" src="{{ product.image.url }}" alt="{{ product.name }}">
+                <img class="product-image lazy-image" data-src="{{ product.image.url }}" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect fill='%23f0f0f0' width='400' height='300'/%3E%3C/svg%3E" alt="{{ product.name }}">
               </a>
             </div>
             <div class="product-badge sale-badge">
@@ -159,7 +159,7 @@
     <h2 class="section-title text-center mb-5">Who We Are</h2>
     <div class="row g-4">
       {% for stat in stats %}
-      <div class="col-md-6 col-lg-3">
+      <div class="col-6 col-md-6 col-lg-3">
         <div class="stat-card text-center">
           <div class="stat-icon">
             <i class="{{ stat.icon }}"></i>
@@ -791,6 +791,56 @@
   margin: 0;
 }
 
+@media (max-width: 768px) {
+  .stats-section {
+    padding: 40px 0;
+  }
+
+  .section-title {
+    font-size: 28px;
+    margin-bottom: 30px;
+  }
+
+  .stat-card {
+    padding: 20px 15px;
+  }
+
+  .stat-icon {
+    font-size: 36px;
+    margin-bottom: 12px;
+  }
+
+  .stat-value {
+    font-size: 28px;
+    margin-bottom: 6px;
+  }
+
+  .stat-label {
+    font-size: 13px;
+    line-height: 1.3;
+  }
+}
+
+@media (max-width: 576px) {
+  .stat-card {
+    padding: 15px 12px;
+  }
+
+  .stat-icon {
+    font-size: 32px;
+    margin-bottom: 10px;
+  }
+
+  .stat-value {
+    font-size: 24px;
+    margin-bottom: 4px;
+  }
+
+  .stat-label {
+    font-size: 12px;
+  }
+}
+
 
 
 /* Top Sales Section */
@@ -940,6 +990,8 @@
   
   .testimonials-card {
     padding: 20px;
+    height: auto;
+    min-height: auto;
   }
   
   .testimonials-content {
@@ -967,7 +1019,8 @@
 }
 
 .team-section .carousel-item{
-  height: 500px;
+  height: auto;
+  min-height: 500px;
 }
 
 .carousel-inner {
@@ -1162,9 +1215,14 @@
     padding: 30px 0;
   }
 
+  .team-section .carousel-item {
+    min-height: auto;
+    height: auto;
+  }
+
   .team-card {
     margin-bottom: 20px;
-    height:100%
+    height: auto;
   }
 
   .team-image-wrapper {
@@ -2162,6 +2220,29 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   `;
   document.head.appendChild(style);
+
+  // Lazy Loading for Images
+  function lazyLoadImages() {
+    const images = document.querySelectorAll('.lazy-image');
+    const imageObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const img = entry.target;
+          img.src = img.dataset.src;
+          img.classList.remove('lazy-image');
+          observer.unobserve(img);
+        }
+      });
+    }, {
+      rootMargin: '50px 0px',
+      threshold: 0.01
+    });
+
+    images.forEach(img => imageObserver.observe(img));
+  }
+
+  // Initialize lazy loading on page load
+  lazyLoadImages();
 });
 </script>
 
