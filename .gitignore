@@ -5,11 +5,11 @@ venv/
 .env
 
 # SQLITE database
-db.sqlite3
+# db.sqlite3
 
 # Ignore all contents of media/product and media/blog
-media/product/
-media/blog/
+# media/product/
+# media/blog/
 
 # Documentation files to ignore
 DESIGN_SYSTEM.md
@@ -17,4 +17,7 @@ QUICK_START_GUIDE.md
 UI_IMPLEMENTATION_GUIDE.md
 UI_UPGRADE_SUMMARY.md
 UPGRADE_COMPLETION_CHECKLIST.md
+UI_MODERNIZATION_GUIDE.md
+MODERNIZATION_SUMMARY.md
+DESIGN_STANDARDS_REFERENCE.md
 **/BLOG_SETUP.md
