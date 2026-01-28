@@ -1,0 +1,192 @@
+{% load static %}
+
+<!-- Mobile Bottom Navigation -->
+<nav class="mobile-bottom-nav">
+  <div class="mobile-nav-container">
+    <!-- Home -->
+    <a href="{% url 'home' %}" class="mobile-nav-link" id="mobile-home">
+      <i class="bi bi-house-fill"></i>
+      <span>Home</span>
+    </a>
+    
+    <!-- Products -->
+    <a href="{% url 'product_catalog' %}" class="mobile-nav-link" id="mobile-products">
+      <i class="bi bi-grid-fill"></i>
+      <span>Products</span>
+    </a>
+    
+    <!-- Blog -->
+    <a href="{% url 'blog:blog_list' %}" class="mobile-nav-link" id="mobile-blog">
+      <i class="bi bi-journal-text"></i>
+      <span>Blog</span>
+    </a>
+    
+    <!-- Cart -->
+    <a href="{% url 'cart_summary' %}" class="mobile-nav-link" id="mobile-cart">
+      <i class="bi bi-cart-fill"></i>
+      <span>Cart</span>
+      <span class="cart-badge" id="mobile-cart-badge">{{ cart|length }}</span>
+    </a>
+    
+    <!-- Profile / Account -->
+    {% if user.is_authenticated %}
+      <a href="{% url 'view_profile' %}" class="mobile-nav-link" id="mobile-profile">
+        <i class="bi bi-person-circle"></i>
+        <span>Profile</span>
+      </a>
+    {% else %}
+      <a href="{% url 'login' %}" class="mobile-nav-link" id="mobile-account">
+        <i class="bi bi-box-arrow-in-right"></i>
+        <span>Account</span>
+      </a>
+    {% endif %}
+  </div>
+</nav>
+
+<style>
+  /* Mobile Bottom Navigation Styles */
+  .mobile-bottom-nav {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(135deg, #0db04b 0%, #0a9a3f 100%);
+    border-top: 2px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.1);
+    z-index: 999;
+    padding: 0;
+    margin: 0;
+  }
+
+  .mobile-nav-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 70px;
+    padding: 0;
+    margin: 0;
+  }
+
+  .mobile-nav-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.8);
+    flex: 1;
+    height: 100%;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    font-weight: 500;
+    gap: 4px;
+  }
+
+  .mobile-nav-link:hover {
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .mobile-nav-link:active {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+
+  .mobile-nav-link i {
+    font-size: 24px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .mobile-nav-link span {
+    font-size: 11px;
+    white-space: nowrap;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .mobile-nav-link:hover i {
+    transform: translateY(-3px);
+    font-size: 26px;
+  }
+
+  /* Cart badge styling */
+  .cart-badge {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    background-color: #dc3545;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .cart-badge:empty {
+    display: none;
+  }
+
+  /* Show mobile nav only on small screens */
+  @media (max-width: 768px) {
+    .mobile-bottom-nav {
+      display: block;
+    }
+  }
+
+  /* Smooth scrolling adjustment for fixed bottom nav */
+  @media (max-width: 768px) {
+    body {
+      padding-bottom: 70px;
+    }
+
+    main {
+      padding-bottom: 0;
+    }
+  }
+</style>
+
+<script>
+  // Update active nav link based on current page
+  document.addEventListener('DOMContentLoaded', function() {
+    const currentUrl = window.location.pathname;
+    const navLinks = document.querySelectorAll('.mobile-nav-link');
+    
+    navLinks.forEach(link => {
+      link.classList.remove('active');
+      if (link.getAttribute('href') === currentUrl) {
+        link.classList.add('active');
+      }
+    });
+  });
+
+  // Update cart badge when cart changes
+  function updateCartBadge() {
+    const badge = document.getElementById('mobile-cart-badge');
+    const mainBadge = document.getElementById('cart_quantity');
+    if (badge && mainBadge) {
+      badge.textContent = mainBadge.textContent;
+    }
+  }
+
+  // Listen for cart updates
+  document.addEventListener('cartUpdated', updateCartBadge);
+</script>
+
+<style>
+  /* Active nav link styling */
+  .mobile-nav-link.active {
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.15);
+    border-bottom: 3px solid white;
+  }
+
+  .mobile-nav-link.active i {
+    font-size: 28px;
+    transform: translateY(-5px);
+  }
+</style>

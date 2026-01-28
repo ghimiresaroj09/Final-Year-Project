@@ -7,6 +7,23 @@
   <div class="hero-content">
     <h1 class="hero-title">Fresh Organic Products</h1>
     <p class="hero-subtitle">Direct from Farm to Your Table</p>
+    
+    <!-- Search Bar -->
+    <form class="hero-search-form mt-4" method="GET" action="{% url 'search' %}">
+      <div class="hero-search-container">
+        <input 
+          type="text" 
+          class="hero-search-input" 
+          placeholder="Search products by name..." 
+          name="query"
+          required
+        >
+        <button type="submit" class="hero-search-btn">
+          <i class="bi bi-search"></i>
+          <span>Search</span>
+        </button>
+      </div>
+    </form>
   </div>
 </section>
 
@@ -171,6 +188,78 @@
   font-weight: 300;
   opacity: 0.9;
   letter-spacing: 0.5px;
+}
+
+/* Hero Search Bar */
+.hero-search-form {
+  margin-top: 30px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.hero-search-container {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.hero-search-input {
+  flex: 1;
+  min-width: 220px;
+  padding: 14px 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  font-size: 16px;
+  background-color: rgba(255, 255, 255, 0.95);
+  color: #0f1419;
+  transition: all 0.3s ease;
+}
+
+.hero-search-input::placeholder {
+  color: #999;
+}
+
+.hero-search-input:focus {
+  outline: none;
+  border-color: white;
+  background-color: white;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
+}
+
+.hero-search-btn {
+  padding: 14px 30px;
+  background-color: #85d764;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.hero-search-btn:hover {
+  background-color: #6ca64a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.hero-search-btn:active {
+  transform: translateY(0);
+}
+
+.hero-search-btn i {
+  font-size: 18px;
+}
+
+.hero-search-btn span {
+  display: inline-block;
 }
 
 /* Category Section */
@@ -396,6 +485,21 @@
 
   .hero-subtitle {
     font-size: 16px;
+  }
+
+  .hero-search-container {
+    flex-direction: column;
+  }
+
+  .hero-search-input {
+    width: 100%;
+    min-width: auto;
+  }
+
+  .hero-search-btn {
+    width: 100%;
+    justify-content: center;
+    min-width: auto;
   }
 
   .category-header {

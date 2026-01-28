@@ -2,9 +2,71 @@ from django.shortcuts import render, redirect
 from .models import *
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import PasswordResetView
+from django.contrib.auth.tokens import default_token_generator
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
 from django.contrib import messages
 import json
 from cart.cart import Cart
+
+# Custom Password Reset View for HTML Emails
+class CustomPasswordResetView(PasswordResetView):
+    def form_valid(self, form):
+        """
+        Send a password reset email with HTML formatting
+        """
+        from django.conf import settings
+        from django.http import HttpResponseRedirect
+        
+        # Get the user from the form
+        for user in form.get_users(form.cleaned_data['email']):
+            # Generate token and UID
+            token = default_token_generator.make_token(user)
+            uid = urlsafe_base64_encode(force_bytes(user.pk))
+            
+            # Build the reset URL
+            protocol = 'https' if self.request.is_secure() else 'http'
+            domain = self.request.get_host()
+            reset_url = f"{protocol}://{domain}/user/password_reset_confirm/{uid}/{token}/"
+            
+            # Prepare context for email templates
+            context = {
+                'user': user,
+                'protocol': protocol,
+                'domain': domain,
+                'uid': uid,
+                'token': token,
+                'reset_url': reset_url,
+            }
+            
+            # Render HTML and text versions
+            try:
+                html_message = render_to_string('registration/password_reset_email.html', context)
+            except:
+                html_message = None
+            
+            text_message = render_to_string('registration/password_reset_email.txt', context)
+            
+            # Create multipart email (HTML + Plain Text)
+            email = EmailMultiAlternatives(
+                subject='Password Reset Request - Hamro Agro Farm',
+                body=text_message,  # Plain text version as fallback
+                from_email=settings.EMAIL_HOST_USER,
+                to=[user.email]
+            )
+            
+            # Attach HTML version
+            if html_message:
+                email.attach_alternative(html_message, "text/html")
+            
+            # Send email
+            email.send(fail_silently=False)
+        
+        # Redirect to password reset done page (don't call super() to avoid duplicate emails)
+        return HttpResponseRedirect(self.get_success_url())
 
 # Create your views here.
 def login_user(request):

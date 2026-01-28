@@ -2,27 +2,162 @@
 
 {% block content %}
 
-<div class="container d-flex justify-content-center mt-5">
-    <div class="card shadow-lg" style="width: 40rem;">
-        <div class="card-body">
-            <h2 class="card-title text-center mb-4">Update Info</h2>
-            <form method="POST" action="{% url 'update_info' %}">
-                {% csrf_token %}
-                <div class="form-group">
-                    <label for="phone">Phone:</label>
-                    <input type="text" class="form-control" id="phone" name="phone" value="{{ profile.phone }}"/>
-                </div>
-                <br />
-                <div class="form-group">
-                    <label for="address">Address:</label>
-                    <input type="text" class="form-control" id="address" name="address" value="{{ profile.address }}"/>
-                </div>
-                <br />
-                <button type="submit" class="btn btn-warning btn-block">Update</button>
-            </form>
-        </div>
-    </div>
-</div>
+<style>
+  .form-container {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    padding: 20px;
+  }
 
+  .form-card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    width: 100%;
+    max-width: 500px;
+  }
+
+  .form-header {
+    text-align: center;
+    margin-bottom: 35px;
+    padding-bottom: 25px;
+    border-bottom: 2px solid #e0e0e0;
+  }
+
+  .form-header h2 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #0f1419;
+    margin-bottom: 10px;
+  }
+
+  .form-header p {
+    color: #666;
+    font-size: 14px;
+    margin: 0;
+  }
+
+  .form-group {
+    margin-bottom: 25px;
+  }
+
+  .form-label {
+    display: block;
+    font-weight: 600;
+    color: #0f1419;
+    margin-bottom: 10px;
+    font-size: 14px;
+  }
+
+  .form-control {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    background-color: #f8f9fa;
+  }
+
+  .form-control:focus {
+    outline: none;
+    border-color: #0db04b;
+    background-color: white;
+    box-shadow: 0 0 0 3px rgba(13, 176, 75, 0.1);
+  }
+
+  .form-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 35px;
+  }
+
+  .btn-submit {
+    flex: 1;
+    padding: 14px 20px;
+    background: linear-gradient(135deg, #0db04b 0%, #0a9a3f 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(13, 176, 75, 0.3);
+  }
+
+  .btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(13, 176, 75, 0.4);
+  }
+
+  .btn-back {
+    flex: 1;
+    padding: 14px 20px;
+    background: #f0f0f0;
+    color: #0f1419;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .btn-back:hover {
+    background: #e0e0e0;
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 576px) {
+    .form-card {
+      padding: 30px 20px;
+    }
+
+    .form-header h2 {
+      font-size: 24px;
+    }
+
+    .form-actions {
+      flex-direction: column;
+    }
+  }
+</style>
+
+<div class="form-container">
+  <div class="form-card">
+    <div class="form-header">
+      <h2><i class="bi bi-info-circle me-2"></i>Update Information</h2>
+      <p>Add your contact and address details</p>
+    </div>
+
+    <form method="POST" action="{% url 'update_info' %}">
+      {% csrf_token %}
+      
+      <div class="form-group">
+        <label for="phone" class="form-label"><i class="bi bi-telephone-fill me-2"></i>Phone Number</label>
+        <input type="text" class="form-control" id="phone" name="phone" placeholder="Your phone number" value="{{ profile.phone }}"/>
+      </div>
+      
+      <div class="form-group">
+        <label for="address" class="form-label"><i class="bi bi-geo-alt-fill me-2"></i>Address</label>
+        <input type="text" class="form-control" id="address" name="address" placeholder="Your address" value="{{ profile.address }}"/>
+      </div>
+      
+      <div class="form-actions">
+        <button type="submit" class="btn-submit"><i class="bi bi-check-circle me-2"></i>Update</button>
+        <a href="{% url 'view_profile' %}" class="btn-back"><i class="bi bi-arrow-left me-2"></i>Back</a>
+      </div>
+    </form>
+  </div>
+</div>
 
 {% endblock %}

@@ -1,23 +1,206 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<div class="container d-flex justify-content-center mt-5">
-    <div class="card shadow-lg" style="width: 40rem;">
-        <div class="card-body text-center">
-            <h1 class="card-title mb-4">{{ user | title }}'s Profile</h1>
-            
-            <p class="card-text"><strong>Username:</strong> {{ user.username }}</p>
-            <p class="card-text"><strong>Email:</strong> {{ user.email }}</p>
-            <p class="card-text"><strong>First Name:</strong> {{ user.first_name }}</p>
-            <p class="card-text"><strong>Last Name:</strong> {{ user.last_name }}</p>
-            
-            <div class="d-flex justify-content-center mt-4">
-                <a class="btn btn-success mx-2" href="{% url 'change_password' %}">Change Password</a>
-                <a class="btn btn-warning mx-2" href="{% url 'edit_profile' %}">Edit Profile</a>
-                <a class="btn btn-danger mx-2" href="{% url 'delete_profile' %}">Delete Profile</a>
-            </div><br>
-        </div>
+<style>
+  .profile-container {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    padding: 20px;
+  }
+
+  .profile-card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    width: 100%;
+    max-width: 600px;
+  }
+
+  .profile-header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-bottom: 30px;
+    border-bottom: 2px solid #e0e0e0;
+  }
+
+  .profile-avatar {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #0db04b 0%, #0a9a3f 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    font-size: 36px;
+    color: white;
+    box-shadow: 0 4px 15px rgba(13, 176, 75, 0.3);
+  }
+
+  .profile-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #0f1419;
+    margin-bottom: 5px;
+  }
+
+  .profile-subtitle {
+    color: #666;
+    font-size: 14px;
+  }
+
+  .profile-info {
+    margin-bottom: 40px;
+  }
+
+  .info-item {
+    display: flex;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .info-item:last-child {
+    border-bottom: none;
+  }
+
+  .info-label {
+    width: 120px;
+    font-weight: 600;
+    color: #0db04b;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .info-value {
+    flex: 1;
+    color: #0f1419;
+    font-size: 14px;
+  }
+
+  .profile-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+  }
+
+  .action-btn {
+    padding: 14px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .btn-edit {
+    background: linear-gradient(135deg, #0db04b 0%, #0a9a3f 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(13, 176, 75, 0.3);
+  }
+
+  .btn-edit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(13, 176, 75, 0.4);
+    color: white;
+  }
+
+  .btn-password {
+    background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
+  }
+
+  .btn-password:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(74, 144, 226, 0.4);
+    color: white;
+  }
+
+  .btn-delete {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+    grid-column: 1 / -1;
+  }
+
+  .btn-delete:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(220, 53, 69, 0.4);
+    color: white;
+  }
+
+  @media (max-width: 576px) {
+    .profile-card {
+      padding: 30px 20px;
+    }
+
+    .profile-title {
+      font-size: 22px;
+    }
+
+    .profile-actions {
+      grid-template-columns: 1fr;
+    }
+
+    .btn-delete {
+      grid-column: auto;
+    }
+  }
+</style>
+
+<div class="profile-container">
+  <div class="profile-card">
+    <div class="profile-header">
+      <div class="profile-avatar">
+        <i class="bi bi-person-fill"></i>
+      </div>
+      <h1 class="profile-title">{{ user.first_name|default:user.username | title }}</h1>
+      <p class="profile-subtitle">@{{ user.username }}</p>
     </div>
+
+    <div class="profile-info">
+      <div class="info-item">
+        <div class="info-label"><i class="bi bi-person-fill"></i> Username</div>
+        <div class="info-value">{{ user.username }}</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label"><i class="bi bi-envelope-fill"></i> Email</div>
+        <div class="info-value">{{ user.email }}</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label"><i class="bi bi-person-fill"></i> First Name</div>
+        <div class="info-value">{{ user.first_name|default:"Not set" }}</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label"><i class="bi bi-person-fill"></i> Last Name</div>
+        <div class="info-value">{{ user.last_name|default:"Not set" }}</div>
+      </div>
+    </div>
+
+    <div class="profile-actions">
+      <a href="{% url 'edit_profile' %}" class="action-btn btn-edit">
+        <i class="bi bi-pencil-fill"></i> Edit Profile
+      </a>
+      <a href="{% url 'change_password' %}" class="action-btn btn-password">
+        <i class="bi bi-lock-fill"></i> Change Password
+      </a>
+      <a href="{% url 'delete_profile' %}" class="action-btn btn-delete">
+        <i class="bi bi-trash-fill"></i> Delete Profile
+      </a>
+    </div>
+  </div>
 </div>
 
 {% endblock %}

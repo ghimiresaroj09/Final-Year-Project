@@ -1,6 +1,6 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
-from .import views
+from . import views
 
 urlpatterns = [
     path("login/",views.login_user, name="login"),
@@ -30,10 +30,10 @@ urlpatterns = [
         name='password_change_done'  # This name must match the one used in the view
     ),
 
-   # Forget Password
+   # Forget Password - Using Custom View for HTML Emails
     path(
         'password_reset/', 
-        auth_views.PasswordResetView.as_view(
+        views.CustomPasswordResetView.as_view(
             template_name='password_reset_form.html'
         ), 
         name='password_reset'

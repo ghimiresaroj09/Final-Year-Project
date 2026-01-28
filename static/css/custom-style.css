@@ -588,3 +588,35 @@ h2:after {
     font-size: 11px;
   }
 }
+
+/* ============================================
+   MOBILE BOTTOM NAVIGATION
+   ============================================ */
+@media (max-width: 768px) {
+  /* Ensure body has bottom padding for fixed nav */
+  body {
+    padding-bottom: 70px;
+  }
+
+  /* Adjust main content area */
+  main {
+    padding-bottom: 0;
+  }
+
+  /* Hide desktop navigation on mobile view */
+  .navbar {
+    position: sticky;
+    top: 0;
+  }
+
+  /* Optimize search bar for mobile */
+  .form-control {
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+
+  /* Stack elements better on mobile */
+  .navbar-collapse {
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+  }
+}
