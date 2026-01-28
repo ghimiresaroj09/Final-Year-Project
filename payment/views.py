@@ -151,13 +151,13 @@ def order_history(request):
 @login_required
 def unshipped_dash(request):
     if request.user.is_authenticated and request.user.is_superuser:
-        orders = Order.objects.filter(shipping_status=False).order_by('-date_ordered')
+        orders = Order.objects.filter(shipping_status=Order.ShippingStatus.PENDING).order_by('-date_ordered')
         if request.method == 'POST':
             order_id = request.POST['num']
             # Get the order or return 404 if not found
             order = get_object_or_404(Order, id=order_id)
             # Update the order
-            order.shipping_status = True
+            order.shipping_status = Order.ShippingStatus.SHIPPED
             order.date_shipped = datetime.now()
             order.save()
             # Redirect with success message
@@ -172,13 +172,13 @@ def unshipped_dash(request):
 @login_required
 def shipped_dash(request):
     if request.user.is_authenticated and request.user.is_superuser:
-        orders = Order.objects.filter(shipping_status=True).order_by('-date_ordered')
+        orders = Order.objects.filter(shipping_status=Order.ShippingStatus.SHIPPED).order_by('-date_ordered')
         if request.method == 'POST':
             order_id = request.POST['num']
             # Get the order or return 404 if not found
             order = get_object_or_404(Order, id=order_id)
             # Update the order
-            order.shipping_status = False
+            order.shipping_status = Order.ShippingStatus.PENDING
             order.date_shipped = None  # Reset the shipped date
             order.save()
             # Redirect with success message

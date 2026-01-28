@@ -112,15 +112,27 @@
 }
 
 .status-shipped {
-  background: linear-gradient(135deg, rgba(13, 176, 75, 0.15) 0%, rgba(13, 176, 75, 0.08) 100%);
-  color: #0db04b;
-  border: 1px solid rgba(13, 176, 75, 0.2);
+  background: linear-gradient(135deg, rgba(33, 150, 243, 0.15) 0%, rgba(33, 150, 243, 0.08) 100%);
+  color: #1976d2;
+  border: 1px solid rgba(33, 150, 243, 0.2);
 }
 
 .status-pending {
   background: linear-gradient(135deg, rgba(255, 193, 7, 0.2) 0%, rgba(255, 193, 7, 0.1) 100%);
   color: #856404;
   border: 1px solid rgba(255, 193, 7, 0.3);
+}
+
+.status-delivered {
+  background: linear-gradient(135deg, rgba(13, 176, 75, 0.15) 0%, rgba(13, 176, 75, 0.08) 100%);
+  color: #0db04b;
+  border: 1px solid rgba(13, 176, 75, 0.2);
+}
+
+.status-cancelled {
+  background: linear-gradient(135deg, rgba(244, 67, 54, 0.15) 0%, rgba(244, 67, 54, 0.08) 100%);
+  color: #d32f2f;
+  border: 1px solid rgba(244, 67, 54, 0.2);
 }
 
 .items-section {
@@ -326,13 +338,21 @@
       <div class="detail-row">
         <span class="detail-label">Status</span>
         <div>
-          {% if order.shipping_status %}
-          <span class="status-badge status-shipped">
-            <i class="bi bi-check-circle-fill"></i>Shipped
-          </span>
-          {% else %}
+          {% if order.shipping_status == 'pending' %}
           <span class="status-badge status-pending">
-            <i class="bi bi-clock-history"></i>Processing
+            <i class="bi bi-clock-history"></i>Pending
+          </span>
+          {% elif order.shipping_status == 'shipped' %}
+          <span class="status-badge status-shipped">
+            <i class="bi bi-truck"></i>Shipped
+          </span>
+          {% elif order.shipping_status == 'delivered' %}
+          <span class="status-badge status-delivered">
+            <i class="bi bi-check-circle-fill"></i>Delivered
+          </span>
+          {% elif order.shipping_status == 'cancelled' %}
+          <span class="status-badge status-cancelled">
+            <i class="bi bi-x-circle-fill"></i>Cancelled
           </span>
           {% endif %}
         </div>
