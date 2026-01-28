@@ -7,6 +7,7 @@ class Profile(models.Model):
     user=models.OneToOneField(User,on_delete=models.CASCADE)
     phone= models.CharField(max_length=15,blank=True)
     address= models.CharField(max_length=200, blank=True)
+    profile_picture = models.ImageField(upload_to='profile_pictures/', blank=True, null=True)
     date_modified= models.DateTimeField(User,auto_now=True)
     old_cart= models.CharField(max_length=200,null=True, blank=True)
 

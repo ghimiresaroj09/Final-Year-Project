@@ -153,6 +153,15 @@ def edit_profile(request):
         user.last_name= request.POST.get('last_name')
         user.email= request.POST.get('email')
         user.save()
+        # Handle profile picture upload
+        try:
+            profile = Profile.objects.get(user=user)
+        except Profile.DoesNotExist:
+            profile = Profile(user=user)
+
+        if 'profile_picture' in request.FILES:
+            profile.profile_picture = request.FILES['profile_picture']
+            profile.save()
         messages.success(request,("Your profile have been updated successfully!!!"))
         return redirect('view_profile')
     return render(request, 'edit_profile.html', {'user': user})

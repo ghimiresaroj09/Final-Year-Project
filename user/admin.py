@@ -44,7 +44,7 @@ class UserAdmin(BaseUserAdmin):
 
 # ProfileAdmin for Profile model
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ('user', 'phone', 'address','old_cart')
+    list_display = ('user', 'phone', 'address', 'profile_picture', 'old_cart')
     search_fields = ('user__username', 'phone')
     list_per_page = 10
     readonly_fields = ('old_cart',)
